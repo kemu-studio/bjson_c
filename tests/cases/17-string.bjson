@@ -1,0 +1,1 @@
+!Hello World, This is a string which is longer than 2^8 which is 256, I've made it to test strings where we encode the length as unsigned 8bit integer... However, I didn't quite realize how boring it would be to write a pointless text that is 255 characters long... Oh, well I'm here now :)

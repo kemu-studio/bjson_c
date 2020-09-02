@@ -1,0 +1,8 @@
+array open '['
+integer: 6
+integer: 5
+integer: 4
+integer: 3
+integer: 1
+array close ']'
+memory leaks:	0

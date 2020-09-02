@@ -1,0 +1,49 @@
+map open '{'
+key: 'title'
+string: 'Complex test, with UTF-8 and other unpleasentries'
+key: 'Nasty Unicode'
+string: 'This is nasty: 𐀀, it's not even UCS-2'
+key: 'Nested dictionary'
+map open '{'
+key: 'Including Arrays'
+array open '['
+integer: 9
+integer: 7
+integer: 5
+integer: 4
+integer: 3
+map open '{'
+key: 'Key'
+string: 'Value'
+map close '}'
+integer: 1
+array close ']'
+key: 'Unicode'
+string: 'æ, ø, å'
+key: 'Text-arrays'
+array open '['
+string: 'a'
+string: 'b'
+string: 'c'
+string: 'd'
+string: 'e'
+string: 'ø'
+string: 'å'
+string: 'k'
+array close ']'
+key: 'Numbers'
+integer: 765235
+key: 'Empty-Array'
+array open '['
+array close ']'
+key: 'Negative number :)'
+integer: -34234
+key: 'Number as string'
+string: '543234'
+map close '}'
+key: 'How about boolean'
+bool: true
+key: 'Do we test everything which possible'
+bool: false
+map close '}'
+memory leaks:	0

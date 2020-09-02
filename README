@@ -1,0 +1,30 @@
+C coding style
+--------------
+
+1. File names:
+  bjson-xxx.c
+  bjson-xxx.h
+  
+2. Struct and custom types:
+  bjson_callbacks_t
+  bjson_status_t
+  
+3. Static, this module only (private) functions:
+  static void _doSomeInternallStuff()
+
+4. Comments are /* */ style always.
+
+5. Enter before begin of block:
+
+  void foo()
+  {
+    struct _bar_t
+    {
+      int x;
+      int y;
+      int z;
+    };
+  }
+  
+6. Global variables (singletons):
+  static int g_some_private_variable = 1;

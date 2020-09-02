@@ -1,0 +1,6 @@
+map open '{'
+key: 'type'
+string: 'test'
+key: 'size'
+parse error: unexpected end of stream
+memory leaks:	0

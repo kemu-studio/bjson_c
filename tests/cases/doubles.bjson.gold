@@ -1,0 +1,7 @@
+array open '['
+double: 1.1
+double: -1.2
+double: 3.141569
+double: 1.23456789012346e+019
+array close ']'
+memory leaks:	0

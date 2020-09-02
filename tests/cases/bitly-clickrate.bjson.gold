@@ -1,0 +1,18 @@
+map open '{'
+key: 'status_code'
+integer: 200
+key: 'data'
+map open '{'
+key: 'phrase'
+string: 'json'
+key: 'rate'
+double: 0.000368
+key: 'lag'
+integer: 6
+key: 'time'
+integer: 1356564619
+map close '}'
+key: 'status_txt'
+string: 'OK'
+map close '}'
+memory leaks:	0

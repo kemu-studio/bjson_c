@@ -1,0 +1,9 @@
+map open '{'
+key: 'Title'
+string: 'Semi long test of dictionary'
+key: 'Purpose'
+string: 'To test how well, dictionaries of length encoded with uint16 works'
+key: 'Method'
+string: 'We ensure that this text is more than 255 characters long and shorter than 65600, then we'll be fine... Oh, and let's add a number below just for obscurity.. Now let's just make sure this text is actually long enoguth, htis can be boring, but just as it gets boring, we done :)'
+parse error: more data than declared
+memory leaks:	0

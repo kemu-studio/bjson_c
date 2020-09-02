@@ -1,0 +1,7 @@
+array open '['
+integer: 6
+integer: 5
+integer: 4
+integer: 3
+parse error: more data than declared
+memory leaks:	0
