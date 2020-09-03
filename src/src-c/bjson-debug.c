@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017,2020 by Kemu Studio (visit ke.mu)
+ * Copyright (c) 2017 by Kemu Studio (visit ke.mu)
  *
  * Author(s): Sylwester Wysocki <sw@ke.mu>,
  *            Roman Pietrzak <rp@ke.mu>
@@ -20,20 +20,25 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#define CREATE_BJSON_CPP_WRAPPER0(funcName)   \
-  bjson_status_t funcName()                   \
-  {                                           \
-    return bjson_##funcName(_bjsonEncodeCtx); \
+#include <stdint.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include "bjson-debug.h"
+
+#if BJSON_DEBUG_DUMP_BUFFERS > 0
+
+void bjson_debug_dumpBuffer(void *buf, size_t bufSize)
+{
+  size_t i;
+
+  uint8_t *buf8 = (uint8_t *) buf;
+
+  for (i = 0; i < bufSize; i++)
+  {
+    fprintf(stderr, "%02x ", buf8[i]);
   }
 
-#define CREATE_BJSON_CPP_WRAPPER1(funcName, type1, param1) \
-  bjson_status_t funcName(type1 param1)                    \
-  {                                                        \
-    return bjson_##funcName(_bjsonEncodeCtx, param1);      \
-  }
+  fprintf(stderr, "\n");
+}
 
-#define CREATE_BJSON_CPP_WRAPPER2(funcName, type1, param1, type2, param2) \
-  bjson_status_t funcName(type1 param1, type2 param2)                     \
-  {                                                                       \
-    return bjson_##funcName(_bjsonEncodeCtx, param1, param2);             \
-  }
+#endif /* BJSON_DEBUG_DEMP_ENABLED */
