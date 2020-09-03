@@ -72,7 +72,7 @@ class BjsonDecoder
   // ---------------------------------------------------------------------------
   //                        Internal wrappers (private)
   // ---------------------------------------------------------------------------
-
+private:
   bjson_decodeCtx_t *_ctx;
 
   BJSON_CPP_DECODE0(onNull)
