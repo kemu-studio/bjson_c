@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 by Kemu Studio (visit ke.mu)
+ * Copyright (c) 2017,2020 by Kemu Studio (visit ke.mu)
  *
  * Author(s): Sylwester Wysocki <sw@ke.mu>,
  *            Roman Pietrzak <rp@ke.mu>
