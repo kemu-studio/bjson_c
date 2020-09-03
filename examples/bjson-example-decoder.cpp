@@ -208,7 +208,7 @@ int main()
 
   //
   // All input data processed. Tell the library, that we passed
-  // while expected bytes. This step is needed to detect unterminated
+  // all expected bytes. This step is needed to detect unterminated
   // BJSON stream e.g. in the middle of array.
   //
 
