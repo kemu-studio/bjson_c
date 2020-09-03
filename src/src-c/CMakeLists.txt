@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2017 by Kemu Studio (visit ke.mu)
+# Copyright (c) 2017,2020 by Kemu Studio (visit ke.mu)
 #
 # Author(s): Sylwester Wysocki <sw@ke.mu>,
 #            Roman Pietrzak <rp@ke.mu>
@@ -20,17 +20,14 @@
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../build/include)
-link_directories   (${CMAKE_CURRENT_SOURCE_DIR}/../build/lib)
+set(CMAKE_C_FLAGS "-O3")
 
-set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../build/bin)
+set(LIBRARY_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../build/lib)
 
-add_executable (bjson-example-decode      bjson-example-decode.c)
-add_executable (bjson-example-encode      bjson-example-encode.c)
-add_executable (bjson-example-encoder-cpp bjson-example-encoder.cpp)
-add_executable (bjson-example-decoder-cpp bjson-example-decoder.cpp)
+set(HEADER_FILES bjson-common.h bjson-decode.h bjson-encode.h)
+set(SOURCES      bjson-common.c bjson-decode.c bjson-encode.c)
 
-target_link_libraries(bjson-example-decode      bjson_c)
-target_link_libraries(bjson-example-encode      bjson_c)
-target_link_libraries(bjson-example-encoder-cpp bjson_c)
-target_link_libraries(bjson-example-decoder-cpp bjson_c)
+add_library (bjson_c ${SOURCES} ${HEADER_FILES})
+
+install(FILES ${HEADER_FILES}
+        DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/../../build/include/bjson)

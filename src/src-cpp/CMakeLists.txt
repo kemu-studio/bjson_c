@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2017 by Kemu Studio (visit ke.mu)
+# Copyright (c) 2017,2020 by Kemu Studio (visit ke.mu)
 #
 # Author(s): Sylwester Wysocki <sw@ke.mu>,
 #            Roman Pietrzak <rp@ke.mu>
@@ -20,15 +20,7 @@
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #
 
-set(CMAKE_C_FLAGS "-O3")
-
-set(LIBRARY_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../build/lib)
-
-set(HEADER_FILES bjson-common.h bjson-decode.h bjson-encode.h)
-set(SOURCES      bjson-common.c bjson-decode.c bjson-encode.c)
-
-add_library (bjson_c ${SOURCES} ${HEADER_FILES})
+set(HEADER_FILES BjsonEncoder.hpp BjsonDecoder.hpp )
 
 install(FILES ${HEADER_FILES}
-        DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/../build/include/bjson)
-
+        DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/../../build/include/bjson)

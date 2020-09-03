@@ -1,4 +1,4 @@
-./clean.sh
+./00_clean.sh
 
 # General native compilation
 cmake .

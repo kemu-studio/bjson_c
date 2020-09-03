@@ -421,7 +421,7 @@ static void _leaveMapOrArray(bjson_encodeCtx_t *ctx, int isMap)
  * ----------------------------------------------------------------------------
  */
 
- 
+
 /*
  * Create new encoder context. All other bjson_encodeXxx() functions
  * need this context to work.

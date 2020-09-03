@@ -24,7 +24,8 @@ cmake_minimum_required (VERSION 2.8)
 project (bjson_c)
 
 # include the subdirectory containing main library.
-add_subdirectory (src)
+add_subdirectory (src/src-c)
+add_subdirectory (src/src-cpp)
 
 # include the subdirectory containing optional tests and examples.
 add_subdirectory (tests    EXCLUDE_FROM_ALL)
