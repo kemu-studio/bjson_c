@@ -49,7 +49,7 @@
 
 class BjsonDecoder
 {
-  private:
+  protected:
 
   // ---------------------------------------------------------------------------
   // Callback methods called when next token was successfuly decoded.
