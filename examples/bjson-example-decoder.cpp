@@ -215,7 +215,7 @@ int main()
   if (bjsonDecoder.complete(decodeCtx) != bjson_status_ok)
   {
     //
-    // Error - whole buffer processed, but something wrong while decoding.
+    // Error - whole buffer processed, but something is wrong while decoding.
     // Check what is going on.
     //
 
