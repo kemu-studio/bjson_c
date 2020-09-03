@@ -20,58 +20,146 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include "BjsonCommon.hpp"
-#include "../bjson-decode.h"
+#include <string>
+#include <bjson/bjson-common.h>
+#include <bjson/bjson-decode.h>
+
+// -----------------------------------------------------------------------------
+//       Helper macros to wrap pure C calbacks into C++ member calls
+// -----------------------------------------------------------------------------
+
+#define BJSON_CPP_DECODE0(NAME)                              \
+  static int _handlerForPureC_##NAME(void *thiz)             \
+  {                                                          \
+    return (reinterpret_cast<BjsonDecoder*>(thiz))->NAME();  \
+  }
+
+#define BJSON_CPP_DECODE1(NAME, TYPE1)                           \
+  static int _handlerForPureC_##NAME(void *thiz, TYPE1 value)    \
+  {                                                              \
+    return (reinterpret_cast<BjsonDecoder*>(thiz))->NAME(value); \
+  }
+
+#define BJSON_CPP_DECODE2(NAME, TYPE1, TYPE2)                      \
+  static int _handlerForPureC_##NAME(void *thiz, TYPE1 x, TYPE2 y) \
+  {                                                                \
+    return (reinterpret_cast<BjsonDecoder*>(thiz))->NAME(x, y);    \
+  }
+
 
 class BjsonDecoder
 {
   private:
 
-  bjson_encodeCtx_t *_bjsonEncodeCtx;
+  // ---------------------------------------------------------------------------
+  // Callback methods called when next token was successfuly decoded.
+  // Overload one or more of below methods to catch decoded values
+  // in stream-like fasion.
+  // ---------------------------------------------------------------------------
+
+  virtual int onNull() {}
+  virtual int onBoolean(int) {}
+  virtual int onInteger(long long) {}
+  virtual int onDouble(double) {}
+  virtual int onNumber(const unsigned char *, size_t) {}
+  virtual int onString(const unsigned char *, size_t) {}
+  virtual int onMapKey(const unsigned char *, size_t) {}
+  virtual int onStartMap() {}
+  virtual int onEndMap() {}
+  virtual int onStartArray() {}
+  virtual int onEndArray() {}
+
+  // ---------------------------------------------------------------------------
+  //                        Internal wrappers (private)
+  // ---------------------------------------------------------------------------
+
+  bjson_decodeCtx_t *_ctx;
+
+  BJSON_CPP_DECODE0(onNull)
+  BJSON_CPP_DECODE0(onStartMap)
+  BJSON_CPP_DECODE0(onEndMap)
+  BJSON_CPP_DECODE0(onStartArray)
+  BJSON_CPP_DECODE0(onEndArray)
+
+  BJSON_CPP_DECODE1(onBoolean, int)
+  BJSON_CPP_DECODE1(onInteger, long long)
+  BJSON_CPP_DECODE1(onDouble, double)
+
+  BJSON_CPP_DECODE2(onNumber, const unsigned char *, size_t)
+  BJSON_CPP_DECODE2(onString, const unsigned char *, size_t)
+  BJSON_CPP_DECODE2(onMapKey, const unsigned char *, size_t)
+
+  bjson_decoderCallbacks_t _callbacks
+  {
+    _handlerForPureC_onNull,
+    _handlerForPureC_onBoolean,
+    _handlerForPureC_onInteger,
+    _handlerForPureC_onDouble,
+
+    _handlerForPureC_onNumber,
+    _handlerForPureC_onString,
+
+    _handlerForPureC_onStartMap,
+    _handlerForPureC_onMapKey,
+    _handlerForPureC_onEndMap,
+
+    _handlerForPureC_onStartArray,
+    _handlerForPureC_onEndArray
+  };
 
   public:
 
-  BjsonEncoder()
+  // ---------------------------------------------------------------------------
+  //                      Wrap init code into constructor
+  // ---------------------------------------------------------------------------
+
+  BjsonDecoder()
   {
-    _bjsonEncodeCtx = bjson_encoderCreate(NULL, NULL);
+    _ctx = bjson_decoderCreate(&_callbacks, NULL, this);
   }
 
-  ~BjsonEncoder()
-  {
-    if (_bjsonEncodeCtx)
-    {
-      bjson_encoderDestroy(_bjsonEncodeCtx);
+  // ---------------------------------------------------------------------------
+  //                      Wrap clean code into destructor
+  // ---------------------------------------------------------------------------
 
-      _bjsonEncodeCtx = NULL;
+  ~BjsonDecoder()
+  {
+    if (_ctx)
+    {
+      bjson_decoderDestroy(_ctx);
+
+      _ctx = NULL;
     }
   }
 
-// TODO: Special cases:
-//  CREATE_BJSON_CPP_WRAPPER2(getResult , bjson_encoderGetResult , void **, buf, size_t *, bufSize)
-//  CREATE_BJSON_CPP_WRAPPER0(clear     , bjson_encoderClear)
-//  CREATE_BJSON_CPP_WRAPPER1(reset     , bjson_encoderReset     , const char *, sepText)
+  // ---------------------------------------------------------------------------
+  //                               Public API
+  // ---------------------------------------------------------------------------
 
-  CREATE_BJSON_CPP_WRAPPER1(encodeInteger, long long int, value)
-  CREATE_BJSON_CPP_WRAPPER1(encodeDouble, double, value)
-  CREATE_BJSON_CPP_WRAPPER0(encodeNull)
-  CREATE_BJSON_CPP_WRAPPER1(encodeBool, int, value)
+  bjson_status_t parse(void *buf, size_t bufSize)
+  {
+    return bjson_decoderParse(_ctx, buf, bufSize);
+  }
 
-  CREATE_BJSON_CPP_WRAPPER0(encodeMapOpen)
-  CREATE_BJSON_CPP_WRAPPER0(encodeMapClose)
-  CREATE_BJSON_CPP_WRAPPER0(encodeArrayOpen)
-  CREATE_BJSON_CPP_WRAPPER0(encodeArrayClose)
+  bjson_status_t complete()
+  {
+    return bjson_decoderComplete(_ctx);
+  }
 
-  CREATE_BJSON_CPP_WRAPPER2(encodeNumberFromText, const char *, text, size_t, textLen)
-  CREATE_BJSON_CPP_WRAPPER2(encodeString        , const char *, text, size_t, textLen)
-  CREATE_BJSON_CPP_WRAPPER1(encodeCString       , const char *, text)
-  CREATE_BJSON_CPP_WRAPPER2(encodeBinary        , void *, blob, size_t, blobSize)
+  // ---------------------------------------------------------------------------
+  //                Wrappers for status management functions
+  // ---------------------------------------------------------------------------
 
-  CREATE_BJSON_CPP_WRAPPER0(encoderGetStatus)
+  bjson_status_t getStatus(const char *sepText)
+  {
+    return bjson_decoderGetStatus(_ctx);
+  }
 
-  // TODO
-  //BJSON_API char *
-  //  bjson_encoderFormatErrorMessage(bjson_encodeCtx_t *ctx, int verbose);
-
-  //BJSON_API void
-  //  bjson_encoderFreeErrorMessage(bjson_encodeCtx_t *ctx, char *errorMsg);
+  inline const std::string formatErrorMessage(int verbose)
+  {
+    char *msg = bjson_decoderFormatErrorMessage(_ctx, verbose);
+    const std::string rv(msg);
+    bjson_decoderFreeErrorMessage(_ctx, msg);
+    return rv;
+  }
 };
