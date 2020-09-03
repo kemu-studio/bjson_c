@@ -49,7 +49,7 @@
 
 class BjsonDecoder
 {
-  protected:
+protected:
 
   // ---------------------------------------------------------------------------
   // Callback methods called when next token was successfuly decoded.
@@ -72,7 +72,10 @@ class BjsonDecoder
   // ---------------------------------------------------------------------------
   //                        Internal wrappers (private)
   // ---------------------------------------------------------------------------
+
 private:
+
+  char *_errorMsg;
   bjson_decodeCtx_t *_ctx;
 
   BJSON_CPP_DECODE0(onNull)
@@ -115,7 +118,8 @@ private:
 
   BjsonDecoder()
   {
-    _ctx = bjson_decoderCreate(&_callbacks, NULL, this);
+    _errorMsg = NULL;
+    _ctx      = bjson_decoderCreate(&_callbacks, NULL, this);
   }
 
   // ---------------------------------------------------------------------------
@@ -124,6 +128,11 @@ private:
 
   ~BjsonDecoder()
   {
+    if (_errorMsg)
+    {
+      bjson_decoderFreeErrorMessage(_ctx, _errorMsg);
+    }
+
     if (_ctx)
     {
       bjson_decoderDestroy(_ctx);
@@ -150,11 +159,14 @@ private:
   //                Wrappers for status management functions
   // ---------------------------------------------------------------------------
 
-  inline const std::string formatErrorMessage(int verbose)
+  inline const char *formatErrorMessage(int verbose)
   {
-    char *msg = bjson_decoderFormatErrorMessage(_ctx, verbose);
-    const std::string rv(msg);
-    bjson_decoderFreeErrorMessage(_ctx, msg);
-    return rv;
+    if (_errorMsg)
+    {
+      bjson_decoderFreeErrorMessage(_ctx, _errorMsg);
+    }
+    _errorMsg = bjson_decoderFormatErrorMessage(_ctx, verbose);
+
+    return _errorMsg;
   }
 };

@@ -48,18 +48,22 @@
 
 class BjsonEncoder
 {
-  private:
+
+private:
+
+  char *_errorMsg;
 
   bjson_encodeCtx_t *_ctx;
 
-  public:
+public:
 
   // ---------------------------------------------------------------------------
   //                      Wrap init code into constructor
   // ---------------------------------------------------------------------------
 
   BjsonEncoder() {
-    _ctx = bjson_encoderCreate(NULL, NULL);
+    _errorMsg = NULL;
+    _ctx      = bjson_encoderCreate(NULL, NULL);
   }
 
   // ---------------------------------------------------------------------------
@@ -68,6 +72,11 @@ class BjsonEncoder
 
   ~BjsonEncoder()
   {
+    if (_errorMsg)
+    {
+      bjson_encoderFreeErrorMessage(_ctx, _errorMsg);
+    }
+
     if (_ctx)
     {
       bjson_encoderDestroy(_ctx);
@@ -119,11 +128,14 @@ class BjsonEncoder
     return bjson_encoderGetStatus(_ctx);
   }
 
-  inline const std::string formatErrorMessage(int verbose)
+  inline const char *formatErrorMessage(int verbose)
   {
-    char *msg = bjson_encoderFormatErrorMessage(_ctx, verbose);
-    const std::string rv(msg);
-    bjson_encoderFreeErrorMessage(_ctx, msg);
-    return rv;
+    if (_errorMsg)
+    {
+      bjson_encoderFreeErrorMessage(_ctx, _errorMsg);
+    }
+    _errorMsg = bjson_encoderFormatErrorMessage(_ctx, verbose);
+
+    return _errorMsg;
   }
 };
