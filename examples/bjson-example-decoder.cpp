@@ -217,7 +217,7 @@ int main()
     // Check what is going on.
     //
 
-    printf("parse error: %s\n", bjsonDecoder.formatErrorMessage(1).c_str());
+    printf("parse error: %s\n", bjsonDecoder.formatErrorMessage(1));
   }
 
   return 0;

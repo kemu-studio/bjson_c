@@ -109,7 +109,7 @@ int main()
      * Error while encoding. Show what is going on.
      */
 
-    fprintf(stderr, "%s", bjsonEncoder.formatErrorMessage(1).c_str());
+    fprintf(stderr, "%s", bjsonEncoder.formatErrorMessage(1));
   }
 
   return 0;
