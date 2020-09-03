@@ -150,11 +150,6 @@ private:
   //                Wrappers for status management functions
   // ---------------------------------------------------------------------------
 
-  bjson_status_t getStatus(const char *sepText)
-  {
-    return bjson_decoderGetStatus(_ctx);
-  }
-
   inline const std::string formatErrorMessage(int verbose)
   {
     char *msg = bjson_decoderFormatErrorMessage(_ctx, verbose);

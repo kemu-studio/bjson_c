@@ -37,8 +37,6 @@
 
 #define BUFFER_SIZE 1024
 
-static int g_deepIdx = 0;
-
 class MyBjsonDecoder : public BjsonDecoder
 {
   int _deepIdx;
@@ -110,7 +108,7 @@ class MyBjsonDecoder : public BjsonDecoder
 
   int onMapKey(const unsigned char *text, size_t textLen)
   {
-    deep_printf("key ('%.*s')", textLen, text);
+    _deep_printf("key ('%.*s')", textLen, text);
     return 1;
   }
 
@@ -144,7 +142,7 @@ class MyBjsonDecoder : public BjsonDecoder
 
   public:
 
-  MyBjsonDecoder : _deepIdx(0) {}
+  MyBjsonDecoder() : _deepIdx(0) {}
 };
 
 
@@ -212,7 +210,7 @@ int main()
   // BJSON stream e.g. in the middle of array.
   //
 
-  if (bjsonDecoder.complete(decodeCtx) != bjson_status_ok)
+  if (bjsonDecoder.complete() != bjson_status_ok)
   {
     //
     // Error - whole buffer processed, but something is wrong while decoding.
