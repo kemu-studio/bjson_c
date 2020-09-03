@@ -52,7 +52,7 @@ int main()
 
   /*
    * Let's encode some tokens now!
-   * We can use bjson_encodeXxx() functions.
+   * We can use bjsonEncoder.encodeXxx() functions.
    * We're going to encode below JSON document:
    * {
    *   "key1" : ["Text example", 1234, 3.14],
