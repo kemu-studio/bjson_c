@@ -1,4 +1,10 @@
+# Cmake
 cmake_install.cmake
 CMakeFiles/
 Makefile
 CMakeCache.txt
+
+# build
+*.a
+build
+install_manifest.txt
