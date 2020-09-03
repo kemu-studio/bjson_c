@@ -20,7 +20,6 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include <string>
 #include <bjson/bjson-common.h>
 #include <bjson/bjson-encode.h>
 
