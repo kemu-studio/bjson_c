@@ -34,39 +34,36 @@ int main()
   void  *bjsonBuffer     = NULL;
   size_t bjsonBufferSize = 0;
 
-  /*
-   * Set stdout to binary mode on windows. We're going to print out
-   * raw binary buffer (output bjson stream).
-   */
+  //
+  // Set stdout to binary mode on windows. We're going to print out
+  // raw binary buffer (output bjson stream).
+  //
 
   #ifdef WIN32
   _setmode(1, _O_BINARY);
   freopen(NULL, "wb", stdout);
   #endif
 
-  /*
-   * Create new encoder object.
-   */
+  //
+  // Create new encoder object.
+  //
 
   BjsonEncoder bjsonEncoder;
 
-  /*
-   * Let's encode some tokens now!
-   * We can use bjsonEncoder.encodeXxx() functions.
-   * We're going to encode below JSON document:
-   * {
-   *   "key1" : ["Text example", 1234, 3.14],
-   *   "key2" : true,
-   *   "key3" : null
-   * }
-   */
+  //
+  // Let's encode some tokens now!
+  // We can use bjsonEncoder.encodeXxx() functions.
+  // We're going to encode below JSON document:
+  // {
+  //   "key1" : ["Text example", 1234, 3.14],
+  //   "key2" : true,
+  //   "key3" : null
+  // }
+  //
 
   bjsonEncoder.encodeMapOpen();
 
-    /*
-     * "key1" : ["Text example", 1234, 3.14]
-     */
-
+    // "key1" : ["Text example", 1234, 3.14]
     bjsonEncoder.encodeCString("key1");
     bjsonEncoder.encodeArrayOpen();
       bjsonEncoder.encodeCString("Text example");
@@ -74,41 +71,29 @@ int main()
       bjsonEncoder.encodeDouble(3.14d);
     bjsonEncoder.encodeArrayClose();
 
-    /*
-     * "key2" : true
-     */
-
+    // "key2" : true
     bjsonEncoder.encodeCString("key2");
     bjsonEncoder.encodeBool(1);
 
-    /*
-     * "key2" : true
-     */
-
+    // "key2" : true
     bjsonEncoder.encodeCString("key3");
     bjsonEncoder.encodeNull();
 
   bjsonEncoder.encodeMapClose();
 
-  /*
-   * BJSON encoded. Now get pointers to created buffer.
-   */
+  //
+  // BJSON encoded. Now get pointers to created buffer.
+  //
 
   if (bjsonEncoder.getResult(&bjsonBuffer,
                              &bjsonBufferSize) == bjson_status_ok)
   {
-    /*
-     * Success, put encoded binary buffer to stdout.
-     */
-
+    // Success, put encoded binary buffer to stdout.
     fwrite(bjsonBuffer, bjsonBufferSize, 1, stdout);
   }
   else
   {
-    /*
-     * Error while encoding. Show what is going on.
-     */
-
+    // Error while encoding. Show what is going on.
     fprintf(stderr, "%s", bjsonEncoder.formatErrorMessage(1));
   }
 

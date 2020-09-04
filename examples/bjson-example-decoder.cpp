@@ -20,10 +20,10 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-/*
- * This is a basic example showing how to decode input BJSON stream into
- * list of tokens.
- */
+//
+// This is a basic example showing how to decode input BJSON stream into
+// list of tokens.
+//
 
 #include <stdio.h>
 #include <stdarg.h>
@@ -47,23 +47,15 @@ class MyBjsonDecoder : public BjsonDecoder
 
   void _deep_printf(const char *fmt, ...)
   {
-    int i;
-
     va_list args;
 
-    /*
-     * Print deep spaces first to show tree structure.
-     */
-
-    for (i = 0; i < _deepIdx * 2; i++)
+    // Print deep spaces first to show tree structure.
+    for (int i = 0; i < _deepIdx * 2; i++)
     {
       printf(" ");
     }
 
-    /*
-     * Print caller specified message.
-     */
-
+    // Print caller specified message.
     va_start(args, fmt);
     vprintf(fmt, args);
     va_end(args);
@@ -131,7 +123,7 @@ class MyBjsonDecoder : public BjsonDecoder
     _deep_printf("[");
     _deepIdx++;
     return 1;
-}
+  }
 
   int onEndArray()
   {
@@ -140,15 +132,15 @@ class MyBjsonDecoder : public BjsonDecoder
     return 1;
   }
 
-  public:
+public:
 
   MyBjsonDecoder() : _deepIdx(0) {}
 };
 
 
-/* ----------------------------------------------------------------------------
- *                                 Entry point
- * ---------------------------------------------------------------------------*/
+// -----------------------------------------------------------------------------
+//                                 Entry point
+// -----------------------------------------------------------------------------
 
 int main()
 {
