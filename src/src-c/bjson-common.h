@@ -35,7 +35,7 @@ extern "C" {
  */
 
 #define BJSON_MAJOR 1
-#define BJSON_MINOR 0
+#define BJSON_MINOR 1
 #define BJSON_MICRO 0
 
 #define BJSON_VERSION ((BJSON_MAJOR * 10000) + (BJSON_MINOR * 100) + BJSON_MICRO)
