@@ -69,7 +69,7 @@ public:
   //                     Wrap clean code into destructor
   // ---------------------------------------------------------------------------
 
-  ~BjsonEncoder()
+  virtual ~BjsonEncoder()
   {
     if (_errorMsg)
     {

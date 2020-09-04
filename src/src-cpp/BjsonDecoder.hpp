@@ -125,7 +125,7 @@ private:
   //                      Wrap clean code into destructor
   // ---------------------------------------------------------------------------
 
-  ~BjsonDecoder()
+  virtual ~BjsonDecoder()
   {
     if (_errorMsg)
     {
