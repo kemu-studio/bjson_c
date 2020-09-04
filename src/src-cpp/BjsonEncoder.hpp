@@ -137,4 +137,11 @@ public:
 
     return _errorMsg;
   }
+
+  // ---------------------------------------------------------------------------
+  //               Wrappers for version related functions
+  // ---------------------------------------------------------------------------
+
+  inline const char * getVersionAsText() {return bjson_getVersionAsText();}
+  inline unsigned int getVersion()       {return bjson_getVersion();}
 };
