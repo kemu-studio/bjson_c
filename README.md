@@ -4,6 +4,12 @@
 - For JavaScript (Node.js) implementation please visit https://github.com/kemu-studio/bjson_node,
 - For protocol details please visit http://bjson.org/.
 
+## Build
+```
+  $ ./01_prepare.sh 
+  $ ./02_build.sh
+```
+
 ## Usage
 - For usage examples please visit *examples* directory. The available examples are:
 
