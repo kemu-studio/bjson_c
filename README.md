@@ -1,6 +1,6 @@
 # bjson_c: binary JSON for C (encoder/decoder)
 - The reference BJSON implementation in C language,
-- For C++ wrappers please check out https://github.com/kemu-studio/bjson_c/tree/master/src/src-cpp,
+- For C++ wrappers please check out [src/src-cpp directory](src/src-cpp) in the source tree,
 - For JavaScript (Node.js) implementation please visit https://github.com/kemu-studio/bjson_node,
 - For protocol details please visit http://bjson.org/.
 
