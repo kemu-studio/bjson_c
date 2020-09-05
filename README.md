@@ -15,10 +15,10 @@
 
 | File name                                                    | Purpose | Target programming language |
 | -------------------------------------------------------------|---------|-----------------------------|
-| [json-example-decode.c](examples/bjson-example-decode.c)     | decode  | pure C                      |
-| [json-example-encode.c](examples/bjson-example-encode.c)     | encode  | pure C                      |
-| [json-example-decode.cpp](examples/bjson-example-decode.cpp) | decode  | C++                         |
-| [json-example-encode.cpp](examples/bjson-example-encode.cpp) | encode  | C++                         |
+| [bjson-example-decode.c](examples/bjson-example-decode.c)     | decode  | pure C                      |
+| [bjson-example-encode.c](examples/bjson-example-encode.c)     | encode  | pure C                      |
+| [bjson-example-decode.cpp](examples/bjson-example-decode.cpp) | decode  | C++                         |
+| [bjson-example-encode.cpp](examples/bjson-example-encode.cpp) | encode  | C++                         |
 
 ## Code formatting (for contributors only)
 
