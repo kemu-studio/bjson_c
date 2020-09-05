@@ -11,10 +11,10 @@
 ```
 
 ## Usage
-- For usage examples please visit *examples* directory. The available examples are:
+- For usage examples please visit [examples directory](examples). The available examples are:
 
-| File name                                                    | Purpose | Target programming language |
-| -------------------------------------------------------------|---------|-----------------------------|
+| File name                                                     | Purpose | Target programming language |
+| --------------------------------------------------------------|---------|-----------------------------|
 | [bjson-example-decode.c](examples/bjson-example-decode.c)     | decode  | pure C                      |
 | [bjson-example-encode.c](examples/bjson-example-encode.c)     | encode  | pure C                      |
 | [bjson-example-decode.cpp](examples/bjson-example-decode.cpp) | decode  | C++                         |
