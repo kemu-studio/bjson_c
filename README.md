@@ -13,12 +13,12 @@
 ## Usage
 - For usage examples please visit [examples directory](examples). The available examples are:
 
-| File name                                                     | Purpose | Target programming language |
-| --------------------------------------------------------------|---------|-----------------------------|
-| [bjson-example-decode.c](examples/bjson-example-decode.c)     | decode  | pure C                      |
-| [bjson-example-encode.c](examples/bjson-example-encode.c)     | encode  | pure C                      |
-| [bjson-example-decode.cpp](examples/bjson-example-decode.cpp) | decode  | C++                         |
-| [bjson-example-encode.cpp](examples/bjson-example-encode.cpp) | encode  | C++                         |
+| File name                                                       | Purpose | Target programming language |
+| ----------------------------------------------------------------|---------|-----------------------------|
+| [bjson-example-decode.c](examples/bjson-example-decode.c)       | decode  | pure C                      |
+| [bjson-example-encode.c](examples/bjson-example-encode.c)       | encode  | pure C                      |
+| [bjson-example-decoder.cpp](examples/bjson-example-decoder.cpp) | decode  | C++                         |
+| [bjson-example-encoder.cpp](examples/bjson-example-encoder.cpp) | encode  | C++                         |
 
 ## Code formatting (for contributors only)
 
