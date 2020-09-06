@@ -49,10 +49,9 @@ class BjsonEncoder
 {
 
 private:
+  char *_errorMsg{} {};
 
-  char *_errorMsg;
-
-  bjson_encodeCtx_t *_ctx;
+  bjson_encodeCtx_t *_ctx{} {};
 
 public:
 
@@ -71,7 +70,7 @@ public:
 
   virtual ~BjsonEncoder()
   {
-    if (_errorMsg)
+    if (_errorMsg != nullptr)
     {
       bjson_encoderFreeErrorMessage(_ctx, _errorMsg);
     }
@@ -129,7 +128,7 @@ public:
 
   inline const char *formatErrorMessage(int verbose)
   {
-    if (_errorMsg)
+    if (_errorMsg != nullptr)
     {
       bjson_encoderFreeErrorMessage(_ctx, _errorMsg);
     }

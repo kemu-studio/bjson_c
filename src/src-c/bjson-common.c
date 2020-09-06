@@ -20,9 +20,9 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include <stdio.h>
 #include "bjson-common.h"
 #include "bjson-constants.h"
+#include <stdio.h>
 
 BJSON_API const char *bjson_getStatusAsText(bjson_status_t statusCode)
 {
@@ -59,7 +59,7 @@ BJSON_API const char *bjson_getStatusAsText(bjson_status_t statusCode)
 
   const char *rv = "internal error";
 
-  int i;
+  int i = 0;
 
   for (i = 0; knownStatusCodes[i].statusText; i++)
   {
@@ -134,7 +134,7 @@ BJSON_API const char *bjson_getTokenName(uint8_t tokenId)
 
   const char *rv = "unknown";
 
-  int i;
+  int i = 0;
 
   for (i = 0; knownTokens[i].name; i++)
   {

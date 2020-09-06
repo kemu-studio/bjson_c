@@ -23,8 +23,8 @@
 #ifndef _BJSON_ENCODE_H_
 #define _BJSON_ENCODE_H_
 
-#include <stddef.h>
 #include "bjson-common.h"
+#include <stddef.h>
 
 #ifdef __cplusplus
 extern "C" {

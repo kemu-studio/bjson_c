@@ -20,13 +20,13 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include "bjson-common.h"
-#include "bjson-debug.h"
-#include "bjson-constants.h"
 #include "bjson-decode.h"
+#include "bjson-common.h"
+#include "bjson-constants.h"
+#include "bjson-debug.h"
 
-#include <stdio.h>
 #include <stdint.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -41,15 +41,15 @@
  * - If callback returns false (0), then stop decode process.
  */
 
-#define PASS_TOKEN0(_ctx_, _cb_)                                          \
-  {                                                                       \
-    if (_ctx_ -> callbacks -> _cb_)                                       \
-    {                                                                     \
-      if (!_ctx_ -> callbacks -> _cb_(_ctx_ -> callerCtx))                \
-      {                                                                   \
-        _setErrorState(_ctx_, bjson_status_canceledByClient);             \
-      }                                                                   \
-    }                                                                     \
+#define PASS_TOKEN0(_ctx_, _cb_)                              \
+  {                                                           \
+    if ((_ctx_)->callbacks->_cb_)                             \
+    {                                                         \
+      if (!(_ctx_)->callbacks->_cb_((_ctx_)->callerCtx))      \
+      {                                                       \
+        _setErrorState(_ctx_, bjson_status_canceledByClient); \
+      }                                                       \
+    }                                                         \
   }
 
 #define PASS_TOKEN(_ctx_, _cb_, ...)                                      \

@@ -20,13 +20,13 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include "bjson-common.h"
-#include "bjson-debug.h"
-#include "bjson-constants.h"
 #include "bjson-encode.h"
+#include "bjson-common.h"
+#include "bjson-constants.h"
+#include "bjson-debug.h"
 
-#include <stdio.h>
 #include <stdint.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 

@@ -23,9 +23,9 @@
 #ifndef _BJSON_DECODE_H_
 #define _BJSON_DECODE_H_
 
+#include "bjson-common.h"
 #include <stddef.h>
 #include <stdint.h>
-#include "bjson-common.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -102,7 +102,7 @@ BJSON_API void
  */
 
 BJSON_API bjson_status_t
-  bjson_decoderParse(bjson_decodeCtx_t *ctx, void *buf, size_t bufSize);
+bjson_decoderParse(bjson_decodeCtx_t *ctx, void *inDataRaw, size_t inDataSize);
 
 BJSON_API bjson_status_t
   bjson_decoderComplete(bjson_decodeCtx_t *ctx);

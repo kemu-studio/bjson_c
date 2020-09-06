@@ -57,12 +57,12 @@ protected:
   // ---------------------------------------------------------------------------
 
   virtual int onNull() {}
-  virtual int onBoolean(int) {}
-  virtual int onInteger(long long) {}
-  virtual int onDouble(double) {}
-  virtual int onNumber(const unsigned char *, size_t) {}
-  virtual int onString(const unsigned char *, size_t) {}
-  virtual int onMapKey(const unsigned char *, size_t) {}
+  virtual int onBoolean(int /*unused*/) {}
+  virtual int onInteger(long long /*unused*/) {}
+  virtual int onDouble(double /*unused*/) {}
+  virtual int onNumber(const unsigned char * /*unused*/, size_t /*unused*/) {}
+  virtual int onString(const unsigned char * /*unused*/, size_t /*unused*/) {}
+  virtual int onMapKey(const unsigned char * /*unused*/, size_t /*unused*/) {}
   virtual int onStartMap() {}
   virtual int onEndMap() {}
   virtual int onStartArray() {}
@@ -73,9 +73,8 @@ protected:
   // ---------------------------------------------------------------------------
 
 private:
-
-  char *_errorMsg;
-  bjson_decodeCtx_t *_ctx;
+  char *_errorMsg{} {};
+  bjson_decodeCtx_t *_ctx{} {};
 
   BJSON_CPP_DECODE0(onNull)
   BJSON_CPP_DECODE0(onStartMap)
@@ -127,7 +126,7 @@ private:
 
   virtual ~BjsonDecoder()
   {
-    if (_errorMsg)
+    if (_errorMsg != nullptr)
     {
       bjson_decoderFreeErrorMessage(_ctx, _errorMsg);
     }
@@ -160,7 +159,7 @@ private:
 
   inline const char *formatErrorMessage(int verbose)
   {
-    if (_errorMsg)
+    if (_errorMsg != nullptr)
     {
       bjson_decoderFreeErrorMessage(_ctx, _errorMsg);
     }

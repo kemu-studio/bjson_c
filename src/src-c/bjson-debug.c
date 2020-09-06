@@ -20,10 +20,10 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include <stdint.h>
-#include <stdlib.h>
-#include <stdio.h>
 #include "bjson-debug.h"
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 #if BJSON_DEBUG_DUMP_BUFFERS > 0
 
