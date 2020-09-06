@@ -1,5 +1,5 @@
 ---
-Checks:          '*,clang-diagnostic-*,clang-analyzer-*,-cppcoreguidelines-pro-type-vararg,-hicpp-vararg,-cppcoreguidelines-pro-bounds-pointer-arithmetic,-hicpp-no-array-decay,-cppcoreguidelines-pro-bounds-array-to-pointer-decay,-cppcoreguidelines-pro-type-reinterpret-cast,-cppcoreguidelines-no-malloc,-hicpp-no-malloc,-cppcoreguidelines-owning-memory'
+Checks:          '*,clang-diagnostic-*,clang-analyzer-*,-cppcoreguidelines-pro-type-vararg,-hicpp-vararg,-cppcoreguidelines-pro-bounds-pointer-arithmetic,-hicpp-no-array-decay,-cppcoreguidelines-pro-bounds-array-to-pointer-decay,-cppcoreguidelines-pro-type-reinterpret-cast,-cppcoreguidelines-no-malloc,-hicpp-no-malloc,-cppcoreguidelines-owning-memory,-llvm-header-guard,-modernize-use-trailing-return-type,-cppcoreguidelines-macro-usage'
 WarningsAsErrors: ''
 HeaderFilterRegex: '.*'
 AnalyzeTemporaryDtors: false

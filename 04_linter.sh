@@ -5,7 +5,7 @@ CLANG_ARG_FIX=""
 # Add -f or --fix to automatically fix
 while [[ "$#" -gt 0 ]]; do
     case $1 in
-        -f|--fix) CLANG_ARG_FIX="--fix"; shift ;;
+        -f|--fix) CLANG_ARG_FIX="--fix -fix-errors"; shift ;;
         -test|--test) test="$2"; shift ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
@@ -30,4 +30,4 @@ parse_one_file () {
 
 # Entry point.
 parse_one_file "./src/src-c/*.c"
-parse_one_file "./src/src-cpp/*.cpp"
+parse_one_file "./src/src-cpp/*.hpp"

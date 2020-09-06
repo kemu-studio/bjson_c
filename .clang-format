@@ -20,7 +20,7 @@ AlwaysBreakBeforeMultilineStrings: false
 AlwaysBreakTemplateDeclarations: false
 BinPackArguments: true
 BinPackParameters: true
-BraceWrapping:   
+BraceWrapping:
   AfterClass:      true
   AfterControlStatement: true
   AfterEnum:       true
@@ -90,10 +90,12 @@ PenaltyBreakString: 1000
 PenaltyExcessCharacter: 1000000
 PenaltyReturnTypeOnItsOwnLine: 60
 PointerAlignment: Right
-RawStringFormats:
-  - Delimiter:       pb
-    Language:        TextProto
-    BasedOnStyle:    google
+# TODO: Review it.
+# https://github.com/QMCPACK/qmcpack/issues/794
+#RawStringFormats:
+#  - Delimiter:       pb
+#   Language:        TextProto
+#   BasedOnStyle:    google
 ReflowComments:  true
 SortIncludes:    true
 SortUsingDeclarations: true
@@ -112,4 +114,3 @@ Standard:        Cpp11
 TabWidth:        8
 UseTab:          Never
 ...
-
