@@ -28,6 +28,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <errno.h>
+#include <inttypes.h>
 #include <bjson/bjson-decode.h>
 
 #ifdef WIN32
@@ -90,9 +91,9 @@ static int test_bjson_boolean(void *ctx, int value)
   return 1;
 }
 
-static int test_bjson_integer(void *ctx, long long value)
+static int test_bjson_integer(void *ctx, int64_t value)
 {
-  deep_printf("integer (%lld)", value);
+  deep_printf("integer (%" PRId64 ")", value);
 
   return 1;
 }

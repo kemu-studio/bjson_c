@@ -531,6 +531,9 @@ BJSON_API bjson_status_t bjson_encoderClear(bjson_encodeCtx_t *ctx)
 BJSON_API bjson_status_t bjson_encoderReset(bjson_encodeCtx_t *ctx,
                                             const char *sepText)
 {
+  /* Unused parameter */
+  (void) sepText;
+
   _setErrorState(ctx, bjson_status_error_notImplemented);
 
   return ctx -> statusCode;
@@ -600,7 +603,7 @@ BJSON_API bjson_status_t bjson_encodeBool(bjson_encodeCtx_t *ctx, int value)
  */
 
 BJSON_API bjson_status_t bjson_encodeInteger(bjson_encodeCtx_t *ctx,
-                                             uint64_t value)
+                                             int64_t value)
 {
   _setErrorStateIfKeyTurn(ctx);
 
@@ -692,6 +695,10 @@ BJSON_API bjson_status_t bjson_encodeNumberFromText(bjson_encodeCtx_t *ctx,
                                                     const char *text,
                                                     size_t textLen)
 {
+  /* Mark unused params */
+  (void) text;
+  (void) textLen;
+
   _setErrorState(ctx, bjson_status_error_notImplemented);
 
   return ctx -> statusCode;

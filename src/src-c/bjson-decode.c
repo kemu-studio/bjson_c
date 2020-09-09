@@ -359,7 +359,7 @@ static void _passBoolean(bjson_decodeCtx_t *ctx, int value)
   PASS_TOKEN(ctx, bjson_boolean, value);
 }
 
-static void _passInteger(bjson_decodeCtx_t *ctx, uint64_t value)
+static void _passInteger(bjson_decodeCtx_t *ctx, int64_t value)
 {
   PASS_TOKEN(ctx, bjson_integer, value);
 }
@@ -369,7 +369,9 @@ static void _passDouble(bjson_decodeCtx_t *ctx, double value)
   PASS_TOKEN(ctx, bjson_double, value);
 }
 
-static void _passString(bjson_decodeCtx_t *ctx, const char *buf, size_t bufLen)
+static void _passString(bjson_decodeCtx_t *ctx,
+                        const unsigned char *buf,
+                        size_t bufLen)
 {
   if (_isKeyTurn(ctx))
   {

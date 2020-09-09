@@ -89,7 +89,7 @@ BJSON_API bjson_status_t bjson_encoderReset(bjson_encodeCtx_t *ctx,
  */
 
 BJSON_API bjson_status_t bjson_encodeInteger(bjson_encodeCtx_t *ctx,
-                                             uint64_t int value);
+                                             int64_t value);
 
 BJSON_API bjson_status_t bjson_encodeDouble(bjson_encodeCtx_t *ctx,
                                             double value);
