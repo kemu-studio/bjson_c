@@ -49,9 +49,9 @@ class BjsonEncoder
 {
 
 private:
-  char *_errorMsg{} {};
 
-  bjson_encodeCtx_t *_ctx{} {};
+  char *             _errorMsg = nullptr;
+  bjson_encodeCtx_t *_ctx      = nullptr;
 
 public:
 

@@ -56,25 +56,26 @@ protected:
   // in stream-like fasion.
   // ---------------------------------------------------------------------------
 
-  virtual int onNull() {}
-  virtual int onBoolean(int /*unused*/) {}
-  virtual int onInteger(long long /*unused*/) {}
-  virtual int onDouble(double /*unused*/) {}
-  virtual int onNumber(const unsigned char * /*unused*/, size_t /*unused*/) {}
-  virtual int onString(const unsigned char * /*unused*/, size_t /*unused*/) {}
-  virtual int onMapKey(const unsigned char * /*unused*/, size_t /*unused*/) {}
-  virtual int onStartMap() {}
-  virtual int onEndMap() {}
-  virtual int onStartArray() {}
-  virtual int onEndArray() {}
+  virtual int onNull() {return 0;}
+  virtual int onBoolean(int /*unused*/) {return 0;}
+  virtual int onInteger(long long /*unused*/) {return 0;}
+  virtual int onDouble(double /*unused*/) {return 0;}
+  virtual int onNumber(const unsigned char * /*unused*/, size_t /*unused*/) {return 0;}
+  virtual int onString(const unsigned char * /*unused*/, size_t /*unused*/) {return 0;}
+  virtual int onMapKey(const unsigned char * /*unused*/, size_t /*unused*/) {return 0;}
+  virtual int onStartMap() {return 0;}
+  virtual int onEndMap() {return 0;}
+  virtual int onStartArray() {return 0;}
+  virtual int onEndArray() {return 0;}
 
   // ---------------------------------------------------------------------------
   //                        Internal wrappers (private)
   // ---------------------------------------------------------------------------
 
 private:
-  char *_errorMsg{} {};
-  bjson_decodeCtx_t *_ctx{} {};
+
+  char *              _errorMsg = nullptr;
+  bjson_decodeCtx_t * _ctx      = nullptr;
 
   BJSON_CPP_DECODE0(onNull)
   BJSON_CPP_DECODE0(onStartMap)
