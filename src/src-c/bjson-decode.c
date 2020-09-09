@@ -25,6 +25,7 @@
 #include "bjson-constants.h"
 #include "bjson-debug.h"
 
+#include <assert.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -426,6 +427,11 @@ static void *bjson_realloc(bjson_decodeCtx_t *ctx, void *ptr, size_t newSize)
 {
   void *rv = NULL;
 
+  /* Realloc is called only if we need more space than current allocated one.
+   * Should be always greater to zero.
+   * Zero size should never happen on production. */
+  assert(newSize > 0);
+
   if (ctx -> memoryFunctions)
   {
     rv = ctx -> memoryFunctions -> realloc(ctx -> callerCtx, ptr, newSize);
@@ -513,7 +519,7 @@ static void _cacheFetch(bjson_decodeCtx_t *ctx,
                         uint8_t **inData,
                         size_t *inDataSize)
 {
-  if (ctx -> cache)
+  if (ctx -> cache && (ctx -> stage == bjson_status_ok))
   {
     size_t bytesToLoad = MIN(ctx -> cacheBytesMissing, *inDataSize);
 
