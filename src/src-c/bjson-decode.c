@@ -960,18 +960,12 @@ BJSON_API bjson_status_t bjson_decoderComplete(bjson_decodeCtx_t *ctx)
 
       _setErrorState(ctx, bjson_status_error_emptyInputPassed);
     }
-    else if (ctx -> stage != bjson_decodeStage_dataType)
+    else if ((ctx -> stage != bjson_decodeStage_dataType) ||
+             (ctx -> cacheBytesMissing > 0))
     {
       /*
-       * Error - stream finished in the middle of token.
-       */
-
-      _setErrorState(ctx, bjson_status_error_unexpectedEndOfStream);
-    }
-    else if (ctx -> cacheBytesMissing > 0)
-    {
-      /*
-       * Error - stream finished in the middle of fragmented buffer.
+       * Error - stream finished in the middle of token
+       * or stream finished in the middle of fragmented buffer.
        */
 
       _setErrorState(ctx, bjson_status_error_unexpectedEndOfStream);
