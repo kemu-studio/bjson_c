@@ -1073,8 +1073,8 @@ BJSON_API char *bjson_decoderFormatErrorMessage(bjson_decodeCtx_t *ctx, int verb
    * Possible improvement: add more context related info.
    */
 
-  int   msgCapacity = 128;
-  char *msgText     = bjson_malloc(ctx, msgCapacity + 1);
+  size_t msgCapacity = BJSON_MAX_ERROR_MESSAGE_LENGTH;
+  char *msgText      = bjson_malloc(ctx, msgCapacity + 1);
 
   if (verbose)
   {

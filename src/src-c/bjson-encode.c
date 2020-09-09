@@ -33,6 +33,12 @@
 #define MIN(a,b) (((a)<(b))?(a):(b))
 #define MAX(a,b) (((a)>(b))?(a):(b))
 
+#define MAX_VALUE_UINT8  0xff
+#define MAX_VALUE_UINT16 0xffff
+#define MAX_VALUE_UINT32 0xffffffff
+
+#define BJSON_DEFAULT_ARRAY_HEADER_SIZE (sizeof(uint32_t) + 1)
+
 /*
  * ----------------------------------------------------------------------------
  *                        Private structs and typedefs
@@ -259,7 +265,7 @@ static void _encodeSizedDataType(bjson_encodeCtx_t *ctx,
   {
     _setErrorState(ctx, bjson_status_error_negativeSize);
   }
-  else if (size <= 0xff)
+  else if (size <= MAX_VALUE_UINT8)
   {
     /*
      * Compact to single byte (uint8).
@@ -268,7 +274,7 @@ static void _encodeSizedDataType(bjson_encodeCtx_t *ctx,
     _putRaw_BYTE(ctx, dataTypeBase | BJSON_DATASIZE_BYTE);
     _putRaw_BYTE(ctx, size);
   }
-  else if (size <= 0xffff)
+  else if (size <= MAX_VALUE_UINT16)
   {
     /*
      * Compact to single word (uint16).
@@ -277,7 +283,7 @@ static void _encodeSizedDataType(bjson_encodeCtx_t *ctx,
     _putRaw_BYTE(ctx, dataTypeBase | BJSON_DATASIZE_WORD);
     _putRaw_WORD(ctx, size);
   }
-  else if (size <= 0xffffffff)
+  else if (size <= MAX_VALUE_UINT32)
   {
     /*
      * Compact to double word (uint32).
@@ -314,7 +320,14 @@ static void _enterMapOrArray(bjson_encodeCtx_t *ctx, int isMap)
 
     _rotateMapTurn(ctx);
 
-    static uint8_t arrayHeaderFiller[] = {0xff, 0xff, 0xff, 0xff, 0xff};
+    static uint8_t arrayHeaderFiller[] =
+    {
+      MAX_VALUE_UINT8,
+      MAX_VALUE_UINT8,
+      MAX_VALUE_UINT8,
+      MAX_VALUE_UINT8,
+      MAX_VALUE_UINT8
+    };
 
     ctx -> deepIdx++;
     ctx -> blockIsMap[ctx -> deepIdx]   = isMap;
@@ -372,7 +385,7 @@ static void _leaveMapOrArray(bjson_encodeCtx_t *ctx, int isMap)
 
     size_t headerIdx  = ctx -> blockIdx[ctx -> deepIdx];
     size_t headerSize = 0;
-    size_t bodySize   = ctx -> outDataIdx - headerIdx - 5;
+    size_t bodySize   = ctx -> outDataIdx - headerIdx - BJSON_DEFAULT_ARRAY_HEADER_SIZE;
 
     BJSON_DEBUG2("encoder: calculated array/map size is [%d] bytes", bodySize);
 
@@ -397,10 +410,10 @@ static void _leaveMapOrArray(bjson_encodeCtx_t *ctx, int isMap)
 
     headerSize = ctx -> outDataIdx - headerIdx;
 
-    if (headerSize < 5)
+    if (headerSize < BJSON_DEFAULT_ARRAY_HEADER_SIZE)
     {
       uint8_t *newBody = ctx -> outData + headerIdx + headerSize;
-      uint8_t *oldBody = ctx -> outData + headerIdx + 5;
+      uint8_t *oldBody = ctx -> outData + headerIdx + BJSON_DEFAULT_ARRAY_HEADER_SIZE;
 
       memmove(newBody, oldBody, bodySize);
     }
@@ -932,7 +945,7 @@ BJSON_API char *bjson_encoderFormatErrorMessage(bjson_encodeCtx_t *ctx, int verb
    * Possible improvement: add more context related info (verbose mode).
    */
 
-  int   msgCapacity = 128;
+  int   msgCapacity = BJSON_MAX_ERROR_MESSAGE_LENGTH;
   char *msgText     = bjson_malloc(ctx, msgCapacity + 1);
 
   snprintf(msgText, msgCapacity, "%s", bjson_getStatusAsText(ctx -> statusCode));
