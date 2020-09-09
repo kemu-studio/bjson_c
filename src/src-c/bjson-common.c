@@ -24,6 +24,10 @@
 #include "bjson-constants.h"
 #include <stdio.h>
 
+#define BJSON_VERSION_TEXT_SIZE 32
+
+static char g_versionText[BJSON_VERSION_TEXT_SIZE] = {0};
+
 BJSON_API const char *bjson_getStatusAsText(bjson_status_t statusCode)
 {
   struct
@@ -151,20 +155,17 @@ BJSON_API const char *bjson_getTokenName(uint8_t tokenId)
 
 BJSON_API const char *bjson_getVersionAsText()
 {
-  static const size_t versionTextSize = 32;
-  static char         versionText[versionTextSize] = {0};
-
-  if (versionText[0] == 0)
+  if (g_versionText[0] == 0)
   {
     /*
      * First time call - render version to static buffer.
      */
 
-    snprintf(versionText, versionTextSize - 1,
+    snprintf(g_versionText, BJSON_VERSION_TEXT_SIZE - 1,
              "%d.%d.%d", BJSON_MAJOR, BJSON_MINOR, BJSON_MICRO);
   }
 
-  return versionText;
+  return g_versionText;
 }
 
 BJSON_API unsigned int bjson_getVersion()
