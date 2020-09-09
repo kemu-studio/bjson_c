@@ -24,8 +24,10 @@ set(CMAKE_C_FLAGS "-O3")
 
 set(LIBRARY_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../build/lib)
 
-set(HEADER_FILES bjson-common.h bjson-decode.h bjson-encode.h)
-set(SOURCES      bjson-common.c bjson-decode.c bjson-encode.c)
+set(HEADER_FILES bjson-common.h bjson-decode.h bjson-encode.h
+                 bjson-constants.h bjson-debug.h)
+
+set(SOURCES bjson-common.c bjson-decode.c bjson-encode.c)
 
 add_library (bjson_c ${SOURCES} ${HEADER_FILES})
 
