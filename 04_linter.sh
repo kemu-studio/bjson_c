@@ -1,5 +1,5 @@
 # Customized arguments passed to underlying clang-tidy tool.
-CLANG_ARG_INCLUDE="-Isrc/src-c -Isrc/src-cpp"
+CLANG_ARG_INCLUDE="-Ibuild/include"
 CLANG_ARG_FIX=""
 
 # Add -f or --fix to automatically fix
@@ -30,4 +30,5 @@ parse_one_file () {
 
 # Entry point.
 parse_one_file "./src/src-c/*.c"
+parse_one_file "./src/src-c/*.h"
 parse_one_file "./src/src-cpp/*.hpp"
