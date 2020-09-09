@@ -256,7 +256,7 @@ static void _putRaw_FLOAT64(bjson_encodeCtx_t *ctx, double value)
 }
 
 static void _encodeSizedDataType(bjson_encodeCtx_t *ctx,
-                                 uint8_t dataTypeBase, long long int size)
+                                 uint8_t dataTypeBase, uint64_t size)
 {
   BJSON_DEBUG3("encoder: going to encode sized data type base [%d], size [%d]",
                dataTypeBase, size);
@@ -600,7 +600,7 @@ BJSON_API bjson_status_t bjson_encodeBool(bjson_encodeCtx_t *ctx, int value)
  */
 
 BJSON_API bjson_status_t bjson_encodeInteger(bjson_encodeCtx_t *ctx,
-                                             long long int value)
+                                             uint64_t value)
 {
   _setErrorStateIfKeyTurn(ctx);
 

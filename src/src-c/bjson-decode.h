@@ -39,7 +39,7 @@ typedef struct
 {
   int (*bjson_null)(void *ctx);
   int (*bjson_boolean)(void *ctx, int value);
-  int (*bjson_integer)(void *ctx, long long value);
+  int (*bjson_integer)(void *ctx, int64_t value);
   int (*bjson_double)(void *ctx, double value);
 
   int (*bjson_number)(void *ctx, const unsigned char *text, size_t textLen);
