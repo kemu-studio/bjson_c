@@ -117,9 +117,14 @@ private:
 
   BjsonDecoder()
   {
-    _errorMsg = NULL;
-    _ctx      = bjson_decoderCreate(&_callbacks, NULL, this);
+    _errorMsg = nullptr;
+    _ctx      = bjson_decoderCreate(&_callbacks, nullptr, this);
   }
+
+  BjsonDecoder(BjsonDecoder const&)             = default;
+  BjsonDecoder& operator =(BjsonDecoder const&) = default;
+  BjsonDecoder(BjsonDecoder&&)                  = default;
+  BjsonDecoder& operator=(BjsonDecoder&&)       = default;
 
   // ---------------------------------------------------------------------------
   //                      Wrap clean code into destructor
@@ -132,11 +137,11 @@ private:
       bjson_decoderFreeErrorMessage(_ctx, _errorMsg);
     }
 
-    if (_ctx)
+    if (_ctx != nullptr)
     {
       bjson_decoderDestroy(_ctx);
 
-      _ctx = NULL;
+      _ctx = nullptr;
     }
   }
 
@@ -173,6 +178,6 @@ private:
   //               Wrappers for version related functions
   // ---------------------------------------------------------------------------
 
-  inline const char * getVersionAsText() {return bjson_getVersionAsText();}
-  inline unsigned int getVersion()       {return bjson_getVersion();}
+  static inline const char * getVersionAsText() { return bjson_getVersionAsText(); }
+  static inline unsigned int getVersion()       { return bjson_getVersion(); }
 };

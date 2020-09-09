@@ -950,7 +950,9 @@ BJSON_API char *bjson_encoderFormatErrorMessage(bjson_encodeCtx_t *ctx, int verb
 {
   /*
    * Possible improvement: add more context related info (verbose mode).
+   * Mark unused parameter.
    */
+  (void) verbose;
 
   int   msgCapacity = BJSON_MAX_ERROR_MESSAGE_LENGTH;
   char *msgText     = bjson_malloc(ctx, msgCapacity + 1);

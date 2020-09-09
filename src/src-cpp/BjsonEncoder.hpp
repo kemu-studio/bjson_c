@@ -60,9 +60,14 @@ public:
   // ---------------------------------------------------------------------------
 
   BjsonEncoder() {
-    _errorMsg = NULL;
-    _ctx      = bjson_encoderCreate(NULL, NULL);
+    _errorMsg = nullptr;
+    _ctx      = bjson_encoderCreate(nullptr, nullptr);
   }
+
+  BjsonEncoder(BjsonEncoder const&)             = default;
+  BjsonEncoder& operator =(BjsonEncoder const&) = default;
+  BjsonEncoder(BjsonEncoder&&)                  = default;
+  BjsonEncoder& operator=(BjsonEncoder&&)       = default;
 
   // ---------------------------------------------------------------------------
   //                     Wrap clean code into destructor
@@ -75,10 +80,10 @@ public:
       bjson_encoderFreeErrorMessage(_ctx, _errorMsg);
     }
 
-    if (_ctx)
+    if (_ctx != nullptr)
     {
       bjson_encoderDestroy(_ctx);
-      _ctx = NULL;
+      _ctx = nullptr;
     }
   }
 
@@ -121,7 +126,7 @@ public:
   //              Wrappers for status management functions
   // ---------------------------------------------------------------------------
 
-  bjson_status_t getStatus(const char *sepText)
+  bjson_status_t getStatus(const char * /*sepText*/)
   {
     return bjson_encoderGetStatus(_ctx);
   }
@@ -141,6 +146,6 @@ public:
   //               Wrappers for version related functions
   // ---------------------------------------------------------------------------
 
-  inline const char * getVersionAsText() {return bjson_getVersionAsText();}
-  inline unsigned int getVersion()       {return bjson_getVersion();}
+  static inline const char * getVersionAsText() { return bjson_getVersionAsText(); }
+  static inline unsigned int getVersion()       { return bjson_getVersion(); }
 };
