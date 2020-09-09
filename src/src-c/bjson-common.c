@@ -151,7 +151,8 @@ BJSON_API const char *bjson_getTokenName(uint8_t tokenId)
 
 BJSON_API const char *bjson_getVersionAsText()
 {
-  static char versionText[32] = {0};
+  static const size_t versionTextSize = 32;
+  static char         versionText[versionTextSize] = {0};
 
   if (versionText[0] == 0)
   {
@@ -159,7 +160,7 @@ BJSON_API const char *bjson_getVersionAsText()
      * First time call - render version to static buffer.
      */
 
-    snprintf(versionText, sizeof(versionText) - 1,
+    snprintf(versionText, versionTextSize - 1,
              "%d.%d.%d", BJSON_MAJOR, BJSON_MINOR, BJSON_MICRO);
   }
 
