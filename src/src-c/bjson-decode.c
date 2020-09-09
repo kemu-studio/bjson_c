@@ -519,7 +519,7 @@ static void _cacheFetch(bjson_decodeCtx_t *ctx,
                         uint8_t **inData,
                         size_t *inDataSize)
 {
-  if (ctx -> cache && (ctx -> stage == bjson_status_ok))
+  if (ctx -> cache && (ctx -> statusCode == bjson_status_ok))
   {
     size_t bytesToLoad = MIN(ctx -> cacheBytesMissing, *inDataSize);
 
