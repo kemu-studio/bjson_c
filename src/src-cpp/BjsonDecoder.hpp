@@ -58,7 +58,7 @@ protected:
 
   virtual int onNull() {return 0;}
   virtual int onBoolean(int /*unused*/) {return 0;}
-  virtual int onInteger(long long /*unused*/) {return 0;}
+  virtual int onInteger(int64_t /*unused*/) {return 0;}
   virtual int onDouble(double /*unused*/) {return 0;}
   virtual int onNumber(const unsigned char * /*unused*/, size_t /*unused*/) {return 0;}
   virtual int onString(const unsigned char * /*unused*/, size_t /*unused*/) {return 0;}
@@ -84,7 +84,7 @@ private:
   BJSON_CPP_DECODE0(onEndArray)
 
   BJSON_CPP_DECODE1(onBoolean, int)
-  BJSON_CPP_DECODE1(onInteger, long long)
+  BJSON_CPP_DECODE1(onInteger, int64_t)
   BJSON_CPP_DECODE1(onDouble, double)
 
   BJSON_CPP_DECODE2(onNumber, const unsigned char *, size_t)

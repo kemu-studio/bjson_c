@@ -104,7 +104,7 @@ public:
   //                Wrappers for one-arg encode functions
   // ---------------------------------------------------------------------------
 
-  BJSON_CPP_ENCODE1(encodeInteger, long long int)
+  BJSON_CPP_ENCODE1(encodeInteger, int64_t)
   BJSON_CPP_ENCODE1(encodeDouble, double)
   BJSON_CPP_ENCODE1(encodeBool, int)
   BJSON_CPP_ENCODE1(encodeCString, const char *)
