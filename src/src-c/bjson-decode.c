@@ -33,6 +33,9 @@
 #define MIN(a,b) (((a)<(b))?(a):(b))
 #define MAX(a,b) (((a)>(b))?(a):(b))
 
+#define BJSON_DATATYPE_SIZE_MASK (0x3U)
+#define BJSON_DATATYPE_BASE_MASK (~0x3U)
+
 /*
  * Helper macro to pass decoded token via caller callback.
  * We do below steps here:
@@ -613,7 +616,7 @@ bjson_status_t bjson_decoderParse(bjson_decodeCtx_t *ctx,
          */
 
         if (_isKeyTurn(ctx) &&
-           ((ctx -> dataType & ~0x3) != BJSON_DATATYPE_STRING_BASE) &&
+           ((ctx -> dataType & BJSON_DATATYPE_BASE_MASK) != BJSON_DATATYPE_STRING_BASE) &&
            (ctx -> dataType != BJSON_DATATYPE_EMPTY_STRING))
         {
           _setErrorState(ctx, bjson_status_error_invalidObjectKey);
@@ -656,8 +659,8 @@ bjson_status_t bjson_decoderParse(bjson_decodeCtx_t *ctx,
              * We store data type size at two less significant bits.
              */
 
-            ctx -> dataTypeBase = ctx -> dataType & ~(0x3);
-            ctx -> dataTypeSize = 1 << (ctx -> dataType & 0x3);
+            ctx -> dataTypeBase = ctx->dataType & BJSON_DATATYPE_BASE_MASK;
+            ctx -> dataTypeSize = 1U << (ctx->dataType & BJSON_DATATYPE_SIZE_MASK);
 
             /*
              * Verify is data type correct.
