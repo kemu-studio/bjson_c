@@ -61,6 +61,10 @@ extern "C" {
 /* Maximum depth level for nested array and map containers. */
 #define BJSON_MAX_DEPTH 1024
 
+/* Maximum length of dynamic-allocated error message in bytes
+ * WITHOUT zero terminator */
+#define BJSON_MAX_ERROR_MESSAGE_LENGTH 128
+
 /*
  * Error codes.
  */

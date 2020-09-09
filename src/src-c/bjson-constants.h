@@ -31,51 +31,51 @@
  * DATATYPE_POSITIVE_INTEGER32 = DATATYPE_POSITIVE_INTEGER_BASE | DATASIZE_DWORD
  */
 
-#define BJSON_DATASIZE_BYTE  0
-#define BJSON_DATASIZE_WORD  1
-#define BJSON_DATASIZE_DWORD 2
-#define BJSON_DATASIZE_QWORD 3
+#define BJSON_DATASIZE_BYTE  0U
+#define BJSON_DATASIZE_WORD  1U
+#define BJSON_DATASIZE_DWORD 2U
+#define BJSON_DATASIZE_QWORD 3U
 
 /*
  * primitive values:
  * There are "zero" values, one byte sized:
  */
 
-#define BJSON_DATATYPE_NULL          0 /* null */
-#define BJSON_DATATYPE_ZERO_OR_FALSE 1 /* numeric zero, or boolean false */
-#define BJSON_DATATYPE_EMPTY_STRING  2 /* empty string */
-#define BJSON_DATATYPE_ONE_OR_TRUE   3 /* boolean true (may be also a numeric one) */
+#define BJSON_DATATYPE_NULL          0U /* null */
+#define BJSON_DATATYPE_ZERO_OR_FALSE 1U /* numeric zero, or boolean false */
+#define BJSON_DATATYPE_EMPTY_STRING  2U /* empty string */
+#define BJSON_DATATYPE_ONE_OR_TRUE   3U /* boolean true (may be also a numeric one) */
 
 /*
  * positive_integer:
  */
 
-#define BJSON_DATATYPE_POSITIVE_INTEGER_BASE 4
-#define BJSON_DATATYPE_POSITIVE_INTEGER8     4
-#define BJSON_DATATYPE_POSITIVE_INTEGER16    5
-#define BJSON_DATATYPE_POSITIVE_INTEGER32    6
-#define BJSON_DATATYPE_POSITIVE_INTEGER64    7
+#define BJSON_DATATYPE_POSITIVE_INTEGER_BASE 4U
+#define BJSON_DATATYPE_POSITIVE_INTEGER8     4U
+#define BJSON_DATATYPE_POSITIVE_INTEGER16    5U
+#define BJSON_DATATYPE_POSITIVE_INTEGER32    6U
+#define BJSON_DATATYPE_POSITIVE_INTEGER64    7U
 
 /*
  * negative_integer:
  * they are in positive form, not mod2
  */
 
-#define BJSON_DATATYPE_NEGATIVE_INTEGER_BASE  8
-#define BJSON_DATATYPE_NEGATIVE_INTEGER8      8
-#define BJSON_DATATYPE_NEGATIVE_INTEGER16     9
-#define BJSON_DATATYPE_NEGATIVE_INTEGER32     10
-#define BJSON_DATATYPE_NEGATIVE_INTEGER64     11
+#define BJSON_DATATYPE_NEGATIVE_INTEGER_BASE  8U
+#define BJSON_DATATYPE_NEGATIVE_INTEGER8      8U
+#define BJSON_DATATYPE_NEGATIVE_INTEGER16     9U
+#define BJSON_DATATYPE_NEGATIVE_INTEGER32     10U
+#define BJSON_DATATYPE_NEGATIVE_INTEGER64     11U
 
 /*
  * float:
  */
 
-#define BJSON_DATATYPE_FLOAT_BASE       12
-#define BJSON_DATATYPE_FLOAT32_OBSOLETE 12 /* Obsolete: don't use in new code */
-#define BJSON_DATATYPE_FLOAT64_OBSOLETE 13 /* Obsolete: don't use in new code */
-#define BJSON_DATATYPE_FLOAT32          14
-#define BJSON_DATATYPE_FLOAT64          15
+#define BJSON_DATATYPE_FLOAT_BASE       12U
+#define BJSON_DATATYPE_FLOAT32_OBSOLETE 12U /* Obsolete: don't use in new code */
+#define BJSON_DATATYPE_FLOAT64_OBSOLETE 13U /* Obsolete: don't use in new code */
+#define BJSON_DATATYPE_FLOAT32          14U
+#define BJSON_DATATYPE_FLOAT64          15U
 
 /*
  * utf8_string:
@@ -85,11 +85,11 @@
  * finishing the string before its real length
  */
 
-#define BJSON_DATATYPE_STRING_BASE 16 /* 16, size[uint8], utf8_data[size*byte] - a short string up to 255 bytes */
-#define BJSON_DATATYPE_STRING8     16 /* 16, size[uint8], utf8_data[size*byte] - a short string up to 255 bytes */
-#define BJSON_DATATYPE_STRING16    17 /* 17, size[uint16], utf8_data[size*byte] - a string of up to 64k bytes */
-#define BJSON_DATATYPE_STRING32    18 /* 18, size[uint32], utf8_data[size*byte] - a long string, 64K to 4GB */
-#define BJSON_DATATYPE_STRING64    19 /* 19, size[uint64], utf8_data[size*byte] - a very long string, which probably wont be even used for now */
+#define BJSON_DATATYPE_STRING_BASE 16U /* 16, size[uint8], utf8_data[size*byte] - a short string up to 255 bytes */
+#define BJSON_DATATYPE_STRING8     16U /* 16, size[uint8], utf8_data[size*byte] - a short string up to 255 bytes */
+#define BJSON_DATATYPE_STRING16    17U /* 17, size[uint16], utf8_data[size*byte] - a string of up to 64k bytes */
+#define BJSON_DATATYPE_STRING32    18U /* 18, size[uint32], utf8_data[size*byte] - a long string, 64K to 4GB */
+#define BJSON_DATATYPE_STRING64    19U /* 19, size[uint64], utf8_data[size*byte] - a very long string, which probably wont be even used for now */
 
 /*
  * binary:
@@ -97,22 +97,22 @@
  * This is not fully JSON transcodable, as the JSON has no native support for binary data.
  */
 
-#define BJSON_DATATYPE_BINARY_BASE 20 /* 20, size[uint8], binary_data[size*byte] */
-#define BJSON_DATATYPE_BINARY8     20 /* 20, size[uint8], binary_data[size*byte] */
-#define BJSON_DATATYPE_BINARY16    21 /* 21, size[uint16], binary_data[size*byte] */
-#define BJSON_DATATYPE_BINARY32    22 /* 22, size[uint32], binary_data[size*byte] */
-#define BJSON_DATATYPE_BINARY64    23 /* 23, size[uint64], binary_data[size*byte] */
+#define BJSON_DATATYPE_BINARY_BASE 20U /* 20, size[uint8], binary_data[size*byte] */
+#define BJSON_DATATYPE_BINARY8     20U /* 20, size[uint8], binary_data[size*byte] */
+#define BJSON_DATATYPE_BINARY16    21U /* 21, size[uint16], binary_data[size*byte] */
+#define BJSON_DATATYPE_BINARY32    22U /* 22, size[uint32], binary_data[size*byte] */
+#define BJSON_DATATYPE_BINARY64    23U /* 23, size[uint64], binary_data[size*byte] */
 
 /*
  * array:
  * in JSON represented as array [item0, item1, item2, ...]
  */
 
-#define BJSON_DATATYPE_ARRAY_BASE 32 /* 32, size[uint8], item0, item1, item2, ...  */
-#define BJSON_DATATYPE_ARRAY8     32 /* 32, size[uint8], item0, item1, item2, ...  */
-#define BJSON_DATATYPE_ARRAY16    33 /* 33, size[uint16], item0, item1, item2, ... */
-#define BJSON_DATATYPE_ARRAY32    34 /* 34, size[uint32], item0, item1, item2, ... */
-#define BJSON_DATATYPE_ARRAY64    35 /* 35, size[uint64], item0, item1, item2, ... */
+#define BJSON_DATATYPE_ARRAY_BASE 32U /* 32, size[uint8], item0, item1, item2, ...  */
+#define BJSON_DATATYPE_ARRAY8     32U /* 32, size[uint8], item0, item1, item2, ...  */
+#define BJSON_DATATYPE_ARRAY16    33U /* 33, size[uint16], item0, item1, item2, ... */
+#define BJSON_DATATYPE_ARRAY32    34U /* 34, size[uint32], item0, item1, item2, ... */
+#define BJSON_DATATYPE_ARRAY64    35U /* 35, size[uint64], item0, item1, item2, ... */
 
 /*
  * map of key -> value:
@@ -123,11 +123,11 @@
  * Keys should be unique.
  */
 
-#define BJSON_DATATYPE_MAP_BASE 36 /* 36, size[uint8], key0, value0, key1, value1, ... */
-#define BJSON_DATATYPE_MAP8     36 /* 36, size[uint8], key0, value0, key1, value1, ... */
-#define BJSON_DATATYPE_MAP16    37 /* 37, size[uint16], key0, value0, key1, value1, ...*/
-#define BJSON_DATATYPE_MAP32    38 /* 38, size[uint32], key0, value0, key1, value1, ...*/
-#define BJSON_DATATYPE_MAP64    39 /* 39, size[uint64], key0, value0, key1, value1, ...*/
+#define BJSON_DATATYPE_MAP_BASE 36U /* 36, size[uint8], key0, value0, key1, value1, ... */
+#define BJSON_DATATYPE_MAP8     36U /* 36, size[uint8], key0, value0, key1, value1, ... */
+#define BJSON_DATATYPE_MAP16    37U /* 37, size[uint16], key0, value0, key1, value1, ...*/
+#define BJSON_DATATYPE_MAP32    38U /* 38, size[uint32], key0, value0, key1, value1, ...*/
+#define BJSON_DATATYPE_MAP64    39U /* 39, size[uint64], key0, value0, key1, value1, ...*/
 
 /*
  * strict primitives:
@@ -137,9 +137,9 @@
  * - implemented by the encoder if possible,
  */
 
-#define BJSON_DATATYPE_STRICT_FALSE        24
-#define BJSON_DATATYPE_STRICT_TRUE         25
-#define BJSON_DATATYPE_STRICT_INTEGER_ZERO 26
-#define BJSON_DATATYPE_STRICT_INTEGER_ONE  27
+#define BJSON_DATATYPE_STRICT_FALSE        24U
+#define BJSON_DATATYPE_STRICT_TRUE         25U
+#define BJSON_DATATYPE_STRICT_INTEGER_ZERO 26U
+#define BJSON_DATATYPE_STRICT_INTEGER_ONE  27U
 
 #endif /* _BJSON_CONSTANTS_H_ */
