@@ -179,6 +179,11 @@ bjson_decodeCtx_t;
  * ----------------------------------------------------------------------------
  */
 
+static int _isOk(bjson_decodeCtx_t *ctx)
+{
+  return (ctx->statusCode == bjson_status_ok);
+}
+
 static void _setErrorState(bjson_decodeCtx_t *ctx, bjson_status_t statusCode)
 {
   BJSON_DEBUG("decoder: set decoder error state (%d): '%s'",
@@ -519,7 +524,7 @@ static void _cacheFetch(bjson_decodeCtx_t *ctx,
                         uint8_t **inData,
                         size_t *inDataSize)
 {
-  if (ctx->cache && (ctx->statusCode == bjson_status_ok))
+  if (_isOk(ctx) && ctx->cache)
   {
     size_t bytesToLoad = MIN(ctx->cacheBytesMissing, *inDataSize);
 
@@ -956,7 +961,7 @@ bjson_status_t bjson_decoderParse(bjson_decodeCtx_t *ctx,
 
 BJSON_API bjson_status_t bjson_decoderComplete(bjson_decodeCtx_t *ctx)
 {
-  if (ctx->statusCode == bjson_status_ok)
+  if (_isOk(ctx))
   {
     /*
      * There was no error at last parse() call.
