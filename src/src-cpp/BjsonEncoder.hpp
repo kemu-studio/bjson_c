@@ -126,7 +126,7 @@ public:
   //              Wrappers for status management functions
   // ---------------------------------------------------------------------------
 
-  bjson_status_t getStatus(const char * /*sepText*/)
+  bjson_status_t getStatus()
   {
     return bjson_encoderGetStatus(_ctx);
   }

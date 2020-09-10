@@ -58,9 +58,9 @@
 
 #define PASS_TOKEN(_ctx_, _cb_, ...)                                      \
   {                                                                       \
-    if (_ctx_ -> callbacks -> _cb_)                                       \
+    if (_ctx_->callbacks->_cb_)                                           \
     {                                                                     \
-      if (!_ctx_ -> callbacks -> _cb_(_ctx_ -> callerCtx, __VA_ARGS__))   \
+      if (!_ctx_->callbacks->_cb_(_ctx_->callerCtx, __VA_ARGS__))         \
       {                                                                   \
         _setErrorState(_ctx_, bjson_status_canceledByClient);             \
       }                                                                   \
@@ -184,13 +184,13 @@ static void _setErrorState(bjson_decodeCtx_t *ctx, bjson_status_t statusCode)
   BJSON_DEBUG("decoder: set decoder error state (%d): '%s'",
               statusCode, bjson_getStatusAsText(statusCode));
 
-  ctx -> statusCode = statusCode;
-  ctx -> stage      = bjson_decodeStage_error;
+  ctx->statusCode = statusCode;
+  ctx->stage      = bjson_decodeStage_error;
 }
 
 static void _enterMapOrArray(bjson_decodeCtx_t *ctx)
 {
-  if (ctx -> deepIdx == BJSON_MAX_DEPTH)
+  if (ctx->deepIdx == BJSON_MAX_DEPTH)
   {
     /* Error - too many nested containers (maps/arrays). */
     _setErrorState(ctx, bjson_status_error_tooManyNestedContainers);
@@ -202,45 +202,45 @@ static void _enterMapOrArray(bjson_decodeCtx_t *ctx)
      * level deeper.
      */
 
-    ctx -> deepIdx++;
-    ctx -> blockType[ctx -> deepIdx]    = ctx -> dataTypeBase;
-    ctx -> blockEndIdx[ctx -> deepIdx]  = ctx -> dataIdx + ctx -> bodySizeOrImmValue.bodySize;
-    ctx -> blockMapTurn[ctx -> deepIdx] = 0;
-    ctx -> stage = bjson_decodeStage_dataType;
+    ctx->deepIdx++;
+    ctx->blockType[ctx->deepIdx]    = ctx->dataTypeBase;
+    ctx->blockEndIdx[ctx->deepIdx]  = ctx->dataIdx + ctx->bodySizeOrImmValue.bodySize;
+    ctx->blockMapTurn[ctx->deepIdx] = 0;
+    ctx->stage = bjson_decodeStage_dataType;
 
-    if (ctx -> dataTypeBase == BJSON_DATATYPE_ARRAY_BASE)
+    if (ctx->dataTypeBase == BJSON_DATATYPE_ARRAY_BASE)
     {
       PASS_TOKEN0(ctx, bjson_start_array);
 
       BJSON_DEBUG("decoder: entered array type [%d], deep [%d], bodyIdx [%u], endIdx [%u]",
-                  ctx -> dataType,
-                  ctx -> deepIdx,
-                  ctx -> dataIdx,
-                  ctx -> blockEndIdx[ctx -> deepIdx]);
+                  ctx->dataType,
+                  ctx->deepIdx,
+                  ctx->dataIdx,
+                  ctx->blockEndIdx[ctx->deepIdx]);
     }
     else
     {
       PASS_TOKEN0(ctx, bjson_start_map);
 
       BJSON_DEBUG("decoder: entered map type [%d], deep [%d], bodyIdx [%u], endIdx [%u]",
-                  ctx -> dataType,
-                  ctx -> deepIdx,
-                  ctx -> dataIdx,
-                  ctx -> blockEndIdx[ctx -> deepIdx]);
+                  ctx->dataType,
+                  ctx->deepIdx,
+                  ctx->dataIdx,
+                  ctx->blockEndIdx[ctx->deepIdx]);
     }
   }
 }
 
 static int _isKeyTurn(bjson_decodeCtx_t *ctx)
 {
-  return ((ctx -> deepIdx > 0) && (ctx -> blockMapTurn[ctx -> deepIdx]));
+  return ((ctx->deepIdx > 0) && (ctx->blockMapTurn[ctx->deepIdx]));
 }
 
 static void _rotateMapTurn(bjson_decodeCtx_t *ctx)
 {
-  if ((ctx -> deepIdx > 0) && (ctx -> blockType[ctx -> deepIdx] == BJSON_DATATYPE_MAP_BASE))
+  if ((ctx->deepIdx > 0) && (ctx->blockType[ctx->deepIdx] == BJSON_DATATYPE_MAP_BASE))
   {
-    ctx -> blockMapTurn[ctx -> deepIdx] = !ctx -> blockMapTurn[ctx -> deepIdx];
+    ctx->blockMapTurn[ctx->deepIdx] = !ctx->blockMapTurn[ctx->deepIdx];
   }
 }
 
@@ -254,11 +254,11 @@ static void _tryLeaveMapOrArray(bjson_decodeCtx_t *ctx)
 
   while (goOn)
   {
-    if (ctx -> deepIdx > 0)
+    if (ctx->deepIdx > 0)
     {
-      size_t nearestBlockEndIdx = ctx -> blockEndIdx[ctx -> deepIdx];
+      size_t nearestBlockEndIdx = ctx->blockEndIdx[ctx->deepIdx];
 
-      if (ctx -> dataIdx > nearestBlockEndIdx)
+      if (ctx->dataIdx > nearestBlockEndIdx)
       {
         /*
          * Error - inconsistent BJSON detected. Container body is out of
@@ -273,7 +273,7 @@ static void _tryLeaveMapOrArray(bjson_decodeCtx_t *ctx)
 
         goOn = 0;
       }
-      else if (nearestBlockEndIdx == ctx -> dataIdx)
+      else if (nearestBlockEndIdx == ctx->dataIdx)
       {
         /*
          * End of map/array exactly matches current position.
@@ -281,19 +281,19 @@ static void _tryLeaveMapOrArray(bjson_decodeCtx_t *ctx)
          * We're going to close nearest one and pop it from containers stack.
          */
 
-        if (ctx -> blockType[ctx -> deepIdx] == BJSON_DATATYPE_ARRAY_BASE)
+        if (ctx->blockType[ctx->deepIdx] == BJSON_DATATYPE_ARRAY_BASE)
         {
           /*
            * Close nearsest array.
            */
 
-          if (ctx -> callbacks -> bjson_end_array)
+          if (ctx->callbacks->bjson_end_array)
           {
-            ctx -> callbacks -> bjson_end_array(ctx -> callerCtx);
+            ctx->callbacks->bjson_end_array(ctx->callerCtx);
           }
 
           BJSON_DEBUG("decoder: leaved array type [%d], deep [%d], dataIdx [%u]",
-                      ctx -> dataType, ctx -> deepIdx, ctx -> dataIdx);
+                      ctx->dataType, ctx->deepIdx, ctx->dataIdx);
         }
         else
         {
@@ -317,17 +317,17 @@ static void _tryLeaveMapOrArray(bjson_decodeCtx_t *ctx)
              * Close nearest map.
              */
 
-            if (ctx -> callbacks -> bjson_end_map)
+            if (ctx->callbacks->bjson_end_map)
             {
-              ctx -> callbacks -> bjson_end_map(ctx -> callerCtx);
+              ctx->callbacks->bjson_end_map(ctx->callerCtx);
             }
 
             BJSON_DEBUG("decoder: leaved map type [%d], deep [%d], dataIdx [%u]",
-                        ctx -> dataType, ctx -> deepIdx, ctx -> dataIdx);
+                        ctx->dataType, ctx->deepIdx, ctx->dataIdx);
           }
         }
 
-        ctx -> deepIdx--;
+        ctx->deepIdx--;
       }
       else
       {
@@ -399,9 +399,9 @@ static void *bjson_malloc(bjson_decodeCtx_t *ctx, size_t size)
 {
   void *rv = NULL;
 
-  if (ctx -> memoryFunctions)
+  if (ctx->memoryFunctions)
   {
-    rv = ctx -> memoryFunctions -> malloc(ctx -> callerCtx, size);
+    rv = ctx->memoryFunctions->malloc(ctx->callerCtx, size);
   }
   else
   {
@@ -413,9 +413,9 @@ static void *bjson_malloc(bjson_decodeCtx_t *ctx, size_t size)
 
 static void bjson_free(bjson_decodeCtx_t *ctx, void *ptr)
 {
-  if (ctx -> memoryFunctions)
+  if (ctx->memoryFunctions)
   {
-    ctx -> memoryFunctions -> free(ctx -> callerCtx, ptr);
+    ctx->memoryFunctions->free(ctx->callerCtx, ptr);
   }
   else
   {
@@ -432,9 +432,9 @@ static void *bjson_realloc(bjson_decodeCtx_t *ctx, void *ptr, size_t newSize)
    * Zero size should never happen on production. */
   assert(newSize > 0);
 
-  if (ctx -> memoryFunctions)
+  if (ctx->memoryFunctions)
   {
-    rv = ctx -> memoryFunctions -> realloc(ctx -> callerCtx, ptr, newSize);
+    rv = ctx->memoryFunctions->realloc(ctx->callerCtx, ptr, newSize);
   }
   else
   {
@@ -460,7 +460,7 @@ static void _cacheBegin(bjson_decodeCtx_t *ctx, size_t bytesNeeded)
 {
   void *newCache = NULL;
 
-  if (ctx -> cache == NULL)
+  if (ctx->cache == NULL)
   {
     /*
      * Cache used first time. There is no buffer allocated yet.
@@ -471,24 +471,24 @@ static void _cacheBegin(bjson_decodeCtx_t *ctx, size_t bytesNeeded)
 
     if (newCache)
     {
-      ctx -> cache         = newCache;
-      ctx -> cacheCapacity = bytesNeeded;
+      ctx->cache         = newCache;
+      ctx->cacheCapacity = bytesNeeded;
       BJSON_DEBUG("decoder: allocated new cache buffer with [%u] bytes", bytesNeeded);
     }
   }
-  else if (ctx -> cacheCapacity < bytesNeeded)
+  else if (ctx->cacheCapacity < bytesNeeded)
   {
     /*
      * Cache buffer already allocated, but it's too small to handle
      * all missing bytes.
      */
 
-    newCache = bjson_realloc(ctx, ctx -> cache, bytesNeeded);
+    newCache = bjson_realloc(ctx, ctx->cache, bytesNeeded);
 
     if (newCache)
     {
-      ctx -> cache         = newCache;
-      ctx -> cacheCapacity = bytesNeeded;
+      ctx->cache         = newCache;
+      ctx->cacheCapacity = bytesNeeded;
 
       BJSON_DEBUG("decoder: increased cache buffer to [%u] bytes", bytesNeeded);
     }
@@ -499,11 +499,11 @@ static void _cacheBegin(bjson_decodeCtx_t *ctx, size_t bytesNeeded)
      * Nothing to do, reuse existing cache buffer.
      */
 
-    newCache = ctx -> cache;
+    newCache = ctx->cache;
   }
 
-  ctx -> cacheBytesMissing = bytesNeeded;
-  ctx -> cacheIdx          = 0;
+  ctx->cacheBytesMissing = bytesNeeded;
+  ctx->cacheIdx          = 0;
 
   if (newCache)
   {
@@ -519,28 +519,28 @@ static void _cacheFetch(bjson_decodeCtx_t *ctx,
                         uint8_t **inData,
                         size_t *inDataSize)
 {
-  if (ctx -> cache && (ctx -> statusCode == bjson_status_ok))
+  if (ctx->cache && (ctx->statusCode == bjson_status_ok))
   {
-    size_t bytesToLoad = MIN(ctx -> cacheBytesMissing, *inDataSize);
+    size_t bytesToLoad = MIN(ctx->cacheBytesMissing, *inDataSize);
 
     if (bytesToLoad > 0)
     {
       /* Avoid false clang-tidy warning:
        * error: Use of memory after it is freed [clang-analyzer-unix.Malloc,-warnings-as-errors]
-       * memcpy(ctx -> cache + ctx -> cacheIdx, *inData, bytesToLoad);
+       * memcpy(ctx->cache + ctx->cacheIdx, *inData, bytesToLoad);
        * ^
        *
        * NOLINTNEXTLINE */
-      memcpy(ctx -> cache + ctx -> cacheIdx, *inData, bytesToLoad);
+      memcpy(ctx->cache + ctx->cacheIdx, *inData, bytesToLoad);
 
-      ctx -> cacheIdx          += bytesToLoad;
-      ctx -> cacheBytesMissing -= bytesToLoad;
+      ctx->cacheIdx          += bytesToLoad;
+      ctx->cacheBytesMissing -= bytesToLoad;
 
       *inDataSize -= bytesToLoad;
       *inData     += bytesToLoad;
 
       BJSON_DEBUG("decoder: fetched [%u] bytes to cache, [%u] still needed",
-                  bytesToLoad, ctx -> cacheBytesMissing);
+                  bytesToLoad, ctx->cacheBytesMissing);
     }
   }
 }
@@ -576,7 +576,7 @@ bjson_status_t bjson_decoderParse(bjson_decodeCtx_t *ctx,
    * pending stage this time.
    */
 
-  if ((ctx -> stage != bjson_decodeStage_error) && (ctx -> cacheBytesMissing > 0))
+  if ((ctx->stage != bjson_decodeStage_error) && (ctx->cacheBytesMissing > 0))
   {
     /*
      * Fetch missing bytes to cache.
@@ -584,7 +584,7 @@ bjson_status_t bjson_decoderParse(bjson_decodeCtx_t *ctx,
 
     _cacheFetch(ctx, &inData, &inDataSize);
 
-    if (ctx -> cacheBytesMissing == 0)
+    if (ctx->cacheBytesMissing == 0)
     {
       /*
        * All missing bytes loaded. Pass them to decoder and restart
@@ -592,8 +592,8 @@ bjson_status_t bjson_decoderParse(bjson_decodeCtx_t *ctx,
        */
 
       BJSON_DEBUG("decoder: %s", "cache completed, going to restart decode");
-      BJSON_DEBUG_DUMP(ctx -> cache, ctx -> cacheIdx);
-      bjson_decoderParse(ctx, ctx -> cache, ctx -> cacheIdx);
+      BJSON_DEBUG_DUMP(ctx->cache, ctx->cacheIdx);
+      bjson_decoderParse(ctx, ctx->cache, ctx->cacheIdx);
     }
   }
 
@@ -602,13 +602,13 @@ bjson_status_t bjson_decoderParse(bjson_decodeCtx_t *ctx,
    * We always process all input buffer no matter is it partially or not.
    */
 
-  while((inDataSize > 0) && (ctx -> stage != bjson_decodeStage_error))
+  while((inDataSize > 0) && (ctx->stage != bjson_decodeStage_error))
   {
     /*
      * Dispatch current stage if possible.
      */
 
-    switch(ctx -> stage)
+    switch(ctx->stage)
     {
       case bjson_decodeStage_dataType:
       {
@@ -618,8 +618,8 @@ bjson_status_t bjson_decoderParse(bjson_decodeCtx_t *ctx,
          * this stage.
          */
 
-        ctx -> dataType = inData[0];
-        ctx -> dataIdx++;
+        ctx->dataType = inData[0];
+        ctx->dataIdx++;
 
         inData++;
         inDataSize--;
@@ -630,8 +630,8 @@ bjson_status_t bjson_decoderParse(bjson_decodeCtx_t *ctx,
          */
 
         if (_isKeyTurn(ctx) &&
-           ((ctx -> dataType & BJSON_DATATYPE_BASE_MASK) != BJSON_DATATYPE_STRING_BASE) &&
-           (ctx -> dataType != BJSON_DATATYPE_EMPTY_STRING))
+           ((ctx->dataType & BJSON_DATATYPE_BASE_MASK) != BJSON_DATATYPE_STRING_BASE) &&
+           (ctx->dataType != BJSON_DATATYPE_EMPTY_STRING))
         {
           _setErrorState(ctx, bjson_status_error_invalidObjectKey);
 
@@ -644,7 +644,7 @@ bjson_status_t bjson_decoderParse(bjson_decodeCtx_t *ctx,
          * byte and this is the last stage.
          */
 
-        switch(ctx -> dataType)
+        switch(ctx->dataType)
         {
           /*
            * Basic primitives (single byte).
@@ -673,14 +673,14 @@ bjson_status_t bjson_decoderParse(bjson_decodeCtx_t *ctx,
              * We store data type size at two less significant bits.
              */
 
-            ctx -> dataTypeBase = ctx->dataType & BJSON_DATATYPE_BASE_MASK;
-            ctx -> dataTypeSize = 1U << (ctx->dataType & BJSON_DATATYPE_SIZE_MASK);
+            ctx->dataTypeBase = ctx->dataType & BJSON_DATATYPE_BASE_MASK;
+            ctx->dataTypeSize = 1U << (ctx->dataType & BJSON_DATATYPE_SIZE_MASK);
 
             /*
              * Verify is data type correct.
              */
 
-            switch (ctx -> dataTypeBase)
+            switch (ctx->dataTypeBase)
             {
               case BJSON_DATATYPE_POSITIVE_INTEGER_BASE:
               case BJSON_DATATYPE_NEGATIVE_INTEGER_BASE:
@@ -696,7 +696,7 @@ bjson_status_t bjson_decoderParse(bjson_decodeCtx_t *ctx,
                  * (array/map/string).
                  */
 
-                ctx -> stage = bjson_decodeStage_bodySizeOrImmValue;
+                ctx->stage = bjson_decodeStage_bodySizeOrImmValue;
 
                 break;
               }
@@ -720,7 +720,7 @@ bjson_status_t bjson_decoderParse(bjson_decodeCtx_t *ctx,
          * value (integer/float).
          */
 
-        if (inDataSize < ctx -> dataTypeSize)
+        if (inDataSize < ctx->dataTypeSize)
         {
           /*
            * Fragmented input detected at stage II (bodySizeOrImmValue).
@@ -732,7 +732,7 @@ bjson_status_t bjson_decoderParse(bjson_decodeCtx_t *ctx,
           BJSON_DEBUG("decoder: %s", "fragmented buffer detected on stage II"
                       " (bodySizeOrImmValue), going to start cache");
 
-          _cacheBegin(ctx, ctx -> dataTypeSize);
+          _cacheBegin(ctx, ctx->dataTypeSize);
           _cacheFetch(ctx, &inData, &inDataSize);
         }
         else
@@ -741,15 +741,15 @@ bjson_status_t bjson_decoderParse(bjson_decodeCtx_t *ctx,
            * We have all data needed to finish stage. Go on.
            */
 
-          ctx -> bodySizeOrImmValue.valueInteger = 0;
+          ctx->bodySizeOrImmValue.valueInteger = 0;
 
-          memcpy(&(ctx -> bodySizeOrImmValue), inData, ctx -> dataTypeSize);
+          memcpy(&(ctx->bodySizeOrImmValue), inData, ctx->dataTypeSize);
 
-          ctx -> dataIdx += ctx -> dataTypeSize;
-          inData         += ctx -> dataTypeSize;
-          inDataSize     -= ctx -> dataTypeSize;
+          ctx->dataIdx += ctx->dataTypeSize;
+          inData       += ctx->dataTypeSize;
+          inDataSize   -= ctx->dataTypeSize;
 
-          switch (ctx -> dataTypeBase)
+          switch (ctx->dataTypeBase)
           {
             /*
              * Positive_integerxx (8/16/32/64).
@@ -758,12 +758,12 @@ bjson_status_t bjson_decoderParse(bjson_decodeCtx_t *ctx,
             case BJSON_DATATYPE_POSITIVE_INTEGER_BASE:
             {
               BJSON_DEBUG("decoder: decoded positive integer%d [%lld]",
-                          ctx -> dataTypeSize*8,
-                          ctx -> bodySizeOrImmValue.valueInteger);
+                          ctx->dataTypeSize*8,
+                          ctx->bodySizeOrImmValue.valueInteger);
 
-              _passInteger(ctx, ctx -> bodySizeOrImmValue.valueInteger);
+              _passInteger(ctx, ctx->bodySizeOrImmValue.valueInteger);
 
-              ctx -> stage = bjson_decodeStage_dataType;
+              ctx->stage = bjson_decodeStage_dataType;
 
               break;
             }
@@ -775,12 +775,12 @@ bjson_status_t bjson_decoderParse(bjson_decodeCtx_t *ctx,
             case BJSON_DATATYPE_NEGATIVE_INTEGER_BASE:
             {
               BJSON_DEBUG("decoder: decoded negative integer%d [%lld]",
-                           ctx -> dataTypeSize*8,
-                          -ctx -> bodySizeOrImmValue.valueInteger);
+                           ctx->dataTypeSize*8,
+                          -ctx->bodySizeOrImmValue.valueInteger);
 
-              _passInteger(ctx, -ctx -> bodySizeOrImmValue.valueInteger);
+              _passInteger(ctx, -ctx->bodySizeOrImmValue.valueInteger);
 
-              ctx -> stage = bjson_decodeStage_dataType;
+              ctx->stage = bjson_decodeStage_dataType;
 
               break;
             }
@@ -791,7 +791,7 @@ bjson_status_t bjson_decoderParse(bjson_decodeCtx_t *ctx,
 
             case BJSON_DATATYPE_FLOAT_BASE:
             {
-              switch(ctx -> dataType)
+              switch(ctx->dataType)
               {
                 case BJSON_DATATYPE_FLOAT32:
                 {
@@ -800,9 +800,9 @@ bjson_status_t bjson_decoderParse(bjson_decodeCtx_t *ctx,
                    */
 
                   BJSON_DEBUG("decoder: decoded float32 [%f]",
-                              ctx -> bodySizeOrImmValue.valueFloat);
+                              ctx->bodySizeOrImmValue.valueFloat);
 
-                  _passDouble(ctx, ctx -> bodySizeOrImmValue.valueFloat);
+                  _passDouble(ctx, ctx->bodySizeOrImmValue.valueFloat);
 
                   break;
                 }
@@ -814,15 +814,15 @@ bjson_status_t bjson_decoderParse(bjson_decodeCtx_t *ctx,
                    */
 
                   BJSON_DEBUG("decoder: decoded float64 [%lf]",
-                              ctx -> bodySizeOrImmValue.valueDouble);
+                              ctx->bodySizeOrImmValue.valueDouble);
 
-                  _passDouble(ctx, ctx -> bodySizeOrImmValue.valueDouble);
+                  _passDouble(ctx, ctx->bodySizeOrImmValue.valueDouble);
 
                   break;
                 }
               }
 
-              ctx -> stage = bjson_decodeStage_dataType;
+              ctx->stage = bjson_decodeStage_dataType;
 
               break;
             }
@@ -833,7 +833,7 @@ bjson_status_t bjson_decoderParse(bjson_decodeCtx_t *ctx,
 
             case BJSON_DATATYPE_STRING_BASE:
             {
-              ctx -> stage = bjson_decodeStage_stringOrBinaryBody;
+              ctx->stage = bjson_decodeStage_stringOrBinaryBody;
 
               break;
             }
@@ -861,7 +861,7 @@ bjson_status_t bjson_decoderParse(bjson_decodeCtx_t *ctx,
          * Stage III (body): Decode string/binary body.
          */
 
-        if (inDataSize < ctx -> bodySizeOrImmValue.bodySize)
+        if (inDataSize < ctx->bodySizeOrImmValue.bodySize)
         {
           /*
            * Fragmented input detected at stage III (body).
@@ -872,7 +872,7 @@ bjson_status_t bjson_decoderParse(bjson_decodeCtx_t *ctx,
           BJSON_DEBUG("decoder: %s", "fragmented buffer detected on stage III (body), "
                       "going to start cache");
 
-          _cacheBegin(ctx, ctx -> bodySizeOrImmValue.bodySize);
+          _cacheBegin(ctx, ctx->bodySizeOrImmValue.bodySize);
           _cacheFetch(ctx, &inData, &inDataSize);
         }
         else
@@ -881,20 +881,20 @@ bjson_status_t bjson_decoderParse(bjson_decodeCtx_t *ctx,
            * We have all data needed to decode string/binary body. Go on.
            */
 
-          if (ctx -> dataTypeBase == BJSON_DATATYPE_STRING_BASE)
+          if (ctx->dataTypeBase == BJSON_DATATYPE_STRING_BASE)
           {
-            _passString(ctx, inData, ctx -> bodySizeOrImmValue.bodySize);
+            _passString(ctx, inData, ctx->bodySizeOrImmValue.bodySize);
           }
           else
           {
-            _passBinary(ctx, inData, ctx -> bodySizeOrImmValue.bodySize);
+            _passBinary(ctx, inData, ctx->bodySizeOrImmValue.bodySize);
           }
 
-          ctx -> stage = bjson_decodeStage_dataType;
+          ctx->stage = bjson_decodeStage_dataType;
 
-          ctx -> dataIdx += ctx -> bodySizeOrImmValue.bodySize;
-          inData         += ctx -> bodySizeOrImmValue.bodySize;
-          inDataSize     -= ctx -> bodySizeOrImmValue.bodySize;
+          ctx->dataIdx += ctx->bodySizeOrImmValue.bodySize;
+          inData       += ctx->bodySizeOrImmValue.bodySize;
+          inDataSize   -= ctx->bodySizeOrImmValue.bodySize;
         }
 
         break;
@@ -912,7 +912,7 @@ bjson_status_t bjson_decoderParse(bjson_decodeCtx_t *ctx,
          * production code.
          */
 
-        BJSON_DEBUG("decoder: FATAL: Unhandled decode stage [%d]\n", ctx -> stage);
+        BJSON_DEBUG("decoder: FATAL: Unhandled decode stage [%d]\n", ctx->stage);
 
         _setErrorState(ctx, bjson_status_error_unhandledDecodeStage);
       }
@@ -922,7 +922,7 @@ bjson_status_t bjson_decoderParse(bjson_decodeCtx_t *ctx,
      * Is whole token decoded?
      */
 
-    if (ctx -> stage == bjson_decodeStage_dataType)
+    if (ctx->stage == bjson_decodeStage_dataType)
     {
       /*
        * Is it last item in current conainer?
@@ -940,7 +940,7 @@ bjson_status_t bjson_decoderParse(bjson_decodeCtx_t *ctx,
     }
   }
 
-  return ctx -> statusCode;
+  return ctx->statusCode;
 }
 
 /*
@@ -956,14 +956,14 @@ bjson_status_t bjson_decoderParse(bjson_decodeCtx_t *ctx,
 
 BJSON_API bjson_status_t bjson_decoderComplete(bjson_decodeCtx_t *ctx)
 {
-  if (ctx -> statusCode == bjson_status_ok)
+  if (ctx->statusCode == bjson_status_ok)
   {
     /*
      * There was no error at last parse() call.
      * Go on and check did input stream finish correctly.
      */
 
-    if (ctx -> dataIdx == 0)
+    if (ctx->dataIdx == 0)
     {
       /*
        * Error - empty input detected. There was no any data passed
@@ -972,8 +972,8 @@ BJSON_API bjson_status_t bjson_decoderComplete(bjson_decodeCtx_t *ctx)
 
       _setErrorState(ctx, bjson_status_error_emptyInputPassed);
     }
-    else if ((ctx -> stage != bjson_decodeStage_dataType) ||
-             (ctx -> cacheBytesMissing > 0))
+    else if ((ctx->stage != bjson_decodeStage_dataType) ||
+             (ctx->cacheBytesMissing > 0))
     {
       /*
        * Error - stream finished in the middle of token
@@ -982,9 +982,9 @@ BJSON_API bjson_status_t bjson_decoderComplete(bjson_decodeCtx_t *ctx)
 
       _setErrorState(ctx, bjson_status_error_unexpectedEndOfStream);
     }
-    else if (ctx -> deepIdx > 0)
+    else if (ctx->deepIdx > 0)
     {
-      if (ctx -> blockType[ctx -> deepIdx] == BJSON_DATATYPE_MAP_BASE)
+      if (ctx->blockType[ctx->deepIdx] == BJSON_DATATYPE_MAP_BASE)
       {
         /*
          * Error - unclosed map at the end of stream.
@@ -1003,7 +1003,7 @@ BJSON_API bjson_status_t bjson_decoderComplete(bjson_decodeCtx_t *ctx)
     }
   }
 
-  return ctx -> statusCode;
+  return ctx->statusCode;
 }
 
 /*
@@ -1036,9 +1036,9 @@ BJSON_API bjson_decodeCtx_t *bjson_decoderCreate(
 {
   bjson_decodeCtx_t *ctx = calloc(sizeof(bjson_decodeCtx_t), 1);
 
-  ctx -> callbacks       = decoderCallbacks;
-  ctx -> memoryFunctions = memoryFunctions;
-  ctx -> callerCtx       = callerCtx;
+  ctx->callbacks       = decoderCallbacks;
+  ctx->memoryFunctions = memoryFunctions;
+  ctx->callerCtx       = callerCtx;
 
   return ctx;
 }
@@ -1053,9 +1053,9 @@ BJSON_API void bjson_decoderDestroy(bjson_decodeCtx_t *ctx)
 {
   if (ctx)
   {
-    if (ctx -> cache)
+    if (ctx->cache)
     {
-      bjson_free(ctx, ctx -> cache);
+      bjson_free(ctx, ctx->cache);
     }
 
     free(ctx);
@@ -1090,9 +1090,9 @@ BJSON_API char *bjson_decoderFormatErrorMessage(bjson_decodeCtx_t *ctx, int verb
      * Format verbose message.
      */
     snprintf(msgText, msgCapacity, "%s near offset %zu (last token is '%s')",
-             bjson_getStatusAsText(ctx -> statusCode),
-             ctx -> dataIdx,
-             bjson_getTokenName(ctx -> dataType));
+             bjson_getStatusAsText(ctx->statusCode),
+             ctx->dataIdx,
+             bjson_getTokenName(ctx->dataType));
   }
   else
   {
@@ -1100,7 +1100,7 @@ BJSON_API char *bjson_decoderFormatErrorMessage(bjson_decodeCtx_t *ctx, int verb
      * Non-verbose mode - simply put error status.
      */
 
-    snprintf(msgText, msgCapacity, "%s", bjson_getStatusAsText(ctx -> statusCode));
+    snprintf(msgText, msgCapacity, "%s", bjson_getStatusAsText(ctx->statusCode));
   }
 
   return msgText;

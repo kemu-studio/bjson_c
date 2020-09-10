@@ -84,9 +84,9 @@ static void *bjson_malloc(bjson_encodeCtx_t *ctx, size_t size)
 {
   void *rv = NULL;
 
-  if (ctx -> memoryFunctions)
+  if (ctx->memoryFunctions)
   {
-    rv = ctx -> memoryFunctions -> malloc(ctx -> callerCtx, size);
+    rv = ctx->memoryFunctions->malloc(ctx->callerCtx, size);
   }
   else
   {
@@ -100,9 +100,9 @@ static void bjson_free(bjson_encodeCtx_t *ctx, void *ptr)
 {
   if (ptr)
   {
-    if (ctx -> memoryFunctions)
+    if (ctx->memoryFunctions)
     {
-      ctx -> memoryFunctions -> free(ctx -> callerCtx, ptr);
+      ctx->memoryFunctions->free(ctx->callerCtx, ptr);
     }
     else
     {
@@ -115,9 +115,9 @@ static void *bjson_realloc(bjson_encodeCtx_t *ctx, void *ptr, size_t newSize)
 {
   void *rv = NULL;
 
-  if (ctx -> memoryFunctions)
+  if (ctx->memoryFunctions)
   {
-    rv = ctx -> memoryFunctions -> realloc(ctx -> callerCtx, ptr, newSize);
+    rv = ctx->memoryFunctions->realloc(ctx->callerCtx, ptr, newSize);
   }
   else
   {
@@ -138,24 +138,24 @@ static void _setErrorState(bjson_encodeCtx_t *ctx, bjson_status_t statusCode)
   BJSON_DEBUG("encoder: set error state (%d): '%s'",
               statusCode, bjson_getStatusAsText(statusCode));
 
-  ctx -> statusCode = statusCode;
+  ctx->statusCode = statusCode;
 }
 
 static int _isOk(bjson_encodeCtx_t *ctx)
 {
-  return (ctx -> statusCode == bjson_status_ok);
+  return (ctx->statusCode == bjson_status_ok);
 }
 
 static int _isKeyTurn(bjson_encodeCtx_t *ctx)
 {
-  return ((ctx -> deepIdx > 0) && (ctx -> blockMapTurn[ctx -> deepIdx]));
+  return ((ctx->deepIdx > 0) && (ctx->blockMapTurn[ctx->deepIdx]));
 }
 
 static void _rotateMapTurn(bjson_encodeCtx_t *ctx)
 {
-  if ((ctx -> deepIdx > 0) && (ctx -> blockIsMap[ctx -> deepIdx]))
+  if ((ctx->deepIdx > 0) && (ctx->blockIsMap[ctx->deepIdx]))
   {
-    ctx -> blockMapTurn[ctx -> deepIdx] = !ctx -> blockMapTurn[ctx -> deepIdx];
+    ctx->blockMapTurn[ctx->deepIdx] = !ctx->blockMapTurn[ctx->deepIdx];
   }
 }
 
@@ -173,19 +173,19 @@ static void _setErrorStateIfKeyTurn(bjson_encodeCtx_t *ctx)
 static void _prepareOutDataBuffer(bjson_encodeCtx_t *ctx,
                                   size_t numberOfExtraBytesNeeded)
 {
-  if (_isOk(ctx) && ctx -> outDataCapacity - ctx -> outDataIdx < numberOfExtraBytesNeeded)
+  if (_isOk(ctx) && ctx->outDataCapacity - ctx->outDataIdx < numberOfExtraBytesNeeded)
   {
     /*
      * Not enough space - resize buffer.
      */
 
-    size_t newCapacity = MAX(ctx -> outDataCapacity * 2,
-                             ctx -> outDataCapacity + numberOfExtraBytesNeeded);
+    size_t newCapacity = MAX(ctx->outDataCapacity * 2,
+                             ctx->outDataCapacity + numberOfExtraBytesNeeded);
 
-    ctx -> outData         = bjson_realloc(ctx, ctx -> outData, newCapacity);
-    ctx -> outDataCapacity = newCapacity;
+    ctx->outData         = bjson_realloc(ctx, ctx->outData, newCapacity);
+    ctx->outDataCapacity = newCapacity;
 
-    if (ctx -> outData)
+    if (ctx->outData)
     {
       BJSON_DEBUG2("encoder: resized outData buffer to [%d] bytes", newCapacity);
     }
@@ -197,36 +197,36 @@ static void _prepareOutDataBuffer(bjson_encodeCtx_t *ctx,
 }
 
 static void _putRaw_BLOB(bjson_encodeCtx_t *ctx,
-                                   const void *buf, size_t bufSize)
+                         const void *buf, size_t bufSize)
 {
   _prepareOutDataBuffer(ctx, bufSize);
 
   if (_isOk(ctx))
   {
-    memcpy(ctx -> outData + ctx -> outDataIdx, buf, bufSize);
+    memcpy(ctx->outData + ctx->outDataIdx, buf, bufSize);
 
-    ctx -> outDataIdx += bufSize;
+    ctx->outDataIdx += bufSize;
   }
 }
 
 static void _putRaw_BYTE(bjson_encodeCtx_t *ctx, uint8_t value)
 {
   BJSON_DEBUG3("encoder: going to put byte [%d] at offset [%d]",
-               value, ctx -> outDataIdx);
+               value, ctx->outDataIdx);
 
   _prepareOutDataBuffer(ctx, 1);
 
   if (_isOk(ctx))
   {
-    ctx -> outData[ctx -> outDataIdx] = value;
-    ctx -> outDataIdx++;
+    ctx->outData[ctx->outDataIdx] = value;
+    ctx->outDataIdx++;
   }
 }
 
 static void _putRaw_WORD(bjson_encodeCtx_t *ctx, uint16_t value)
 {
   BJSON_DEBUG3("encoder: going to put word [%d] at offset [%d]",
-               value, ctx -> outDataIdx);
+               value, ctx->outDataIdx);
 
   _putRaw_BLOB(ctx, &value, sizeof(value));
 }
@@ -234,7 +234,7 @@ static void _putRaw_WORD(bjson_encodeCtx_t *ctx, uint16_t value)
 static void _putRaw_DWORD(bjson_encodeCtx_t *ctx, uint32_t value)
 {
   BJSON_DEBUG3("encoder: going to put dword [%d] at offset [%d]",
-               value, ctx -> outDataIdx);
+               value, ctx->outDataIdx);
 
   _putRaw_BLOB(ctx, &value, sizeof(value));
 }
@@ -242,7 +242,7 @@ static void _putRaw_DWORD(bjson_encodeCtx_t *ctx, uint32_t value)
 static void _putRaw_QWORD(bjson_encodeCtx_t *ctx, uint64_t value)
 {
   BJSON_DEBUG3("encoder: going to put qword [%d] at offset [%d]",
-               value, ctx -> outDataIdx);
+               value, ctx->outDataIdx);
 
   _putRaw_BLOB(ctx, &value, sizeof(value));
 }
@@ -250,7 +250,7 @@ static void _putRaw_QWORD(bjson_encodeCtx_t *ctx, uint64_t value)
 static void _putRaw_FLOAT64(bjson_encodeCtx_t *ctx, double value)
 {
   BJSON_DEBUG3("encoder: going to put float64 [%lf] at offset [%d]",
-               value, ctx -> outDataIdx);
+               value, ctx->outDataIdx);
 
   _putRaw_BLOB(ctx, &value, sizeof(value));
 }
@@ -305,7 +305,7 @@ static void _encodeSizedDataType(bjson_encodeCtx_t *ctx,
 
 static void _enterMapOrArray(bjson_encodeCtx_t *ctx, int isMap)
 {
-  if (ctx -> deepIdx == BJSON_MAX_DEPTH)
+  if (ctx->deepIdx == BJSON_MAX_DEPTH)
   {
     /* Error - too many nested containers (maps/arrays). */
     _setErrorState(ctx, bjson_status_error_tooManyNestedContainers);
@@ -329,23 +329,23 @@ static void _enterMapOrArray(bjson_encodeCtx_t *ctx, int isMap)
       MAX_VALUE_UINT8
     };
 
-    ctx -> deepIdx++;
-    ctx -> blockIsMap[ctx -> deepIdx]   = isMap;
-    ctx -> blockIdx[ctx -> deepIdx]     = ctx -> outDataIdx;
-    ctx -> blockMapTurn[ctx -> deepIdx] = 0;
+    ctx->deepIdx++;
+    ctx->blockIsMap[ctx->deepIdx]   = isMap;
+    ctx->blockIdx[ctx->deepIdx]     = ctx->outDataIdx;
+    ctx->blockMapTurn[ctx->deepIdx] = 0;
 
     _putRaw_BLOB(ctx, arrayHeaderFiller, sizeof(arrayHeaderFiller));
 
     BJSON_DEBUG("encoder: entered '%s', deep [%d], dataIdx [%d]",
                 isMap ? "map" : "array",
-                ctx -> deepIdx,
-                ctx -> outDataIdx);
+                ctx->deepIdx,
+                ctx->outDataIdx);
   }
 }
 
 static void _leaveMapOrArray(bjson_encodeCtx_t *ctx, int isMap)
 {
-  if (ctx -> deepIdx < 1)
+  if (ctx->deepIdx < 1)
   {
     /*
      * Error - neither map nor array open.
@@ -361,7 +361,7 @@ static void _leaveMapOrArray(bjson_encodeCtx_t *ctx, int isMap)
     }
 
   }
-  else if (ctx -> blockIsMap[ctx -> deepIdx] != isMap)
+  else if (ctx->blockIsMap[ctx->deepIdx] != isMap)
   {
     /*
      * Error - type mismatch while closing i.e. map closed, but
@@ -383,9 +383,9 @@ static void _leaveMapOrArray(bjson_encodeCtx_t *ctx, int isMap)
      * Calculate real body size.
      */
 
-    size_t headerIdx  = ctx -> blockIdx[ctx -> deepIdx];
+    size_t headerIdx  = ctx->blockIdx[ctx->deepIdx];
     size_t headerSize = 0;
-    size_t bodySize   = ctx -> outDataIdx - headerIdx - BJSON_DEFAULT_ARRAY_HEADER_SIZE;
+    size_t bodySize   = ctx->outDataIdx - headerIdx - BJSON_DEFAULT_ARRAY_HEADER_SIZE;
 
     BJSON_DEBUG2("encoder: calculated array/map size is [%d] bytes", bodySize);
 
@@ -393,9 +393,9 @@ static void _leaveMapOrArray(bjson_encodeCtx_t *ctx, int isMap)
      * Fill up header padded at enterXxx() call.
      */
 
-    ctx -> outDataIdx = headerIdx;
+    ctx->outDataIdx = headerIdx;
 
-    if (ctx -> blockIsMap[ctx -> deepIdx])
+    if (ctx->blockIsMap[ctx->deepIdx])
     {
       _encodeSizedDataType(ctx, BJSON_DATATYPE_MAP_BASE, bodySize);
     }
@@ -408,23 +408,23 @@ static void _leaveMapOrArray(bjson_encodeCtx_t *ctx, int isMap)
      * Move body backward if header is less than 32-bit.
      */
 
-    headerSize = ctx -> outDataIdx - headerIdx;
+    headerSize = ctx->outDataIdx - headerIdx;
 
     if (headerSize < BJSON_DEFAULT_ARRAY_HEADER_SIZE)
     {
-      uint8_t *newBody = ctx -> outData + headerIdx + headerSize;
-      uint8_t *oldBody = ctx -> outData + headerIdx + BJSON_DEFAULT_ARRAY_HEADER_SIZE;
+      uint8_t *newBody = ctx->outData + headerIdx + headerSize;
+      uint8_t *oldBody = ctx->outData + headerIdx + BJSON_DEFAULT_ARRAY_HEADER_SIZE;
 
       memmove(newBody, oldBody, bodySize);
     }
 
-    ctx -> outDataIdx = headerIdx + headerSize + bodySize;
-    ctx -> deepIdx--;
+    ctx->outDataIdx = headerIdx + headerSize + bodySize;
+    ctx->deepIdx--;
 
     BJSON_DEBUG("encoder: leaved '%s', deep [%d], dataIdx [%d]",
                 isMap ? "map" : "array",
-                ctx -> deepIdx + 1,
-                ctx -> outDataIdx);
+                ctx->deepIdx + 1,
+                ctx->outDataIdx);
   }
 }
 
@@ -460,8 +460,8 @@ BJSON_API bjson_encodeCtx_t *bjson_encoderCreate(
 {
   bjson_encodeCtx_t *ctx = calloc(sizeof(bjson_encodeCtx_t), 1);
 
-  ctx -> memoryFunctions = memoryFunctions;
-  ctx -> callerCtx       = callerCtx;
+  ctx->memoryFunctions = memoryFunctions;
+  ctx->callerCtx       = callerCtx;
 
   return ctx;
 }
@@ -476,9 +476,9 @@ BJSON_API void bjson_encoderDestroy(bjson_encodeCtx_t *ctx)
 {
   if (ctx)
   {
-    if (ctx -> outData)
+    if (ctx->outData)
     {
-      bjson_free(ctx, ctx -> outData);
+      bjson_free(ctx, ctx->outData);
     }
 
     free(ctx);
@@ -506,11 +506,11 @@ BJSON_API bjson_status_t bjson_encoderGetResult(bjson_encodeCtx_t *ctx,
 {
   if (_isOk(ctx))
   {
-    *buf     = ctx -> outData;
-    *bufSize = ctx -> outDataIdx;
+    *buf     = ctx->outData;
+    *bufSize = ctx->outDataIdx;
   }
 
-  return ctx -> statusCode;
+  return ctx->statusCode;
 }
 
 /*
@@ -521,7 +521,7 @@ BJSON_API bjson_status_t bjson_encoderClear(bjson_encodeCtx_t *ctx)
 {
   _setErrorState(ctx, bjson_status_error_notImplemented);
 
-  return ctx -> statusCode;
+  return ctx->statusCode;
 }
 
 /*
@@ -536,7 +536,7 @@ BJSON_API bjson_status_t bjson_encoderReset(bjson_encodeCtx_t *ctx,
 
   _setErrorState(ctx, bjson_status_error_notImplemented);
 
-  return ctx -> statusCode;
+  return ctx->statusCode;
 }
 
 /*
@@ -558,10 +558,10 @@ BJSON_API bjson_status_t bjson_encodeNull(bjson_encodeCtx_t *ctx)
     _rotateMapTurn(ctx);
 
     BJSON_DEBUG("encoder: encoded null, deep [%d], dataIdx [%d]",
-                ctx -> deepIdx, ctx -> outDataIdx);
+                ctx->deepIdx, ctx->outDataIdx);
   }
 
-  return ctx -> statusCode;
+  return ctx->statusCode;
 }
 
 /*
@@ -586,10 +586,10 @@ BJSON_API bjson_status_t bjson_encodeBool(bjson_encodeCtx_t *ctx, int value)
     _rotateMapTurn(ctx);
 
     BJSON_DEBUG("encoder: encoded bool (%d), deep [%d], dataIdx [%d]",
-                value, ctx -> deepIdx, ctx -> outDataIdx);
+                value, ctx->deepIdx, ctx->outDataIdx);
   }
 
-  return ctx -> statusCode;
+  return ctx->statusCode;
 }
 
 /*
@@ -618,7 +618,7 @@ BJSON_API bjson_status_t bjson_encodeInteger(bjson_encodeCtx_t *ctx,
       _putRaw_BYTE(ctx, BJSON_DATATYPE_STRICT_INTEGER_ZERO);
 
       BJSON_DEBUG("encoder: encoded integer zero, deep [%d], dataIdx [%d]",
-                  ctx -> deepIdx, ctx -> outDataIdx);
+                  ctx->deepIdx, ctx->outDataIdx);
     }
     else if (value == 1)
     {
@@ -629,7 +629,7 @@ BJSON_API bjson_status_t bjson_encodeInteger(bjson_encodeCtx_t *ctx,
       _putRaw_BYTE(ctx, BJSON_DATATYPE_STRICT_INTEGER_ONE);
 
       BJSON_DEBUG("encoder: encoded integer one, deep [%d], dataIdx [%d]",
-                  ctx -> deepIdx, ctx -> outDataIdx);
+                  ctx->deepIdx, ctx->outDataIdx);
     }
     else if (value < 0)
     {
@@ -640,7 +640,7 @@ BJSON_API bjson_status_t bjson_encodeInteger(bjson_encodeCtx_t *ctx,
       _encodeSizedDataType(ctx, BJSON_DATATYPE_NEGATIVE_INTEGER_BASE, -value);
 
       BJSON_DEBUG("encoder: encoded negative integer (%lld), deep [%d], dataIdx [%d]",
-                  value, ctx -> deepIdx, ctx -> outDataIdx);
+                  value, ctx->deepIdx, ctx->outDataIdx);
     }
     else
     {
@@ -651,13 +651,13 @@ BJSON_API bjson_status_t bjson_encodeInteger(bjson_encodeCtx_t *ctx,
       _encodeSizedDataType(ctx, BJSON_DATATYPE_POSITIVE_INTEGER_BASE, value);
 
       BJSON_DEBUG("encoder: encoded positive integer (%lld), deep [%d], dataIdx [%d]",
-                  value, ctx -> deepIdx, ctx -> outDataIdx);
+                  value, ctx->deepIdx, ctx->outDataIdx);
     }
 
     _rotateMapTurn(ctx);
   }
 
-  return ctx -> statusCode;
+  return ctx->statusCode;
 }
 
 /*
@@ -681,10 +681,10 @@ BJSON_API bjson_status_t bjson_encodeDouble(bjson_encodeCtx_t *ctx, double value
     _rotateMapTurn(ctx);
 
     BJSON_DEBUG("encoder: encoded double (%lf), deep [%d], dataIdx [%d]",
-                value, ctx -> deepIdx, ctx -> outDataIdx);
+                value, ctx->deepIdx, ctx->outDataIdx);
   }
 
-  return ctx -> statusCode;
+  return ctx->statusCode;
 }
 
 /*
@@ -701,7 +701,7 @@ BJSON_API bjson_status_t bjson_encodeNumberFromText(bjson_encodeCtx_t *ctx,
 
   _setErrorState(ctx, bjson_status_error_notImplemented);
 
-  return ctx -> statusCode;
+  return ctx->statusCode;
 }
 
 /*
@@ -734,7 +734,7 @@ BJSON_API bjson_status_t bjson_encodeString(bjson_encodeCtx_t *ctx,
       _putRaw_BYTE(ctx, BJSON_DATATYPE_EMPTY_STRING);
 
       BJSON_DEBUG("encoder: encoded empty string, deep [%d], dataIdx [%d]",
-                  ctx -> deepIdx, ctx -> outDataIdx);
+                  ctx->deepIdx, ctx->outDataIdx);
     }
     else
     {
@@ -749,7 +749,7 @@ BJSON_API bjson_status_t bjson_encodeString(bjson_encodeCtx_t *ctx,
        */
 
       BJSON_DEBUG3("encoder: going to put [%d] bytes of utf8 string at offset [%d]",
-                   textLen, ctx -> outDataIdx);
+                   textLen, ctx->outDataIdx);
 
       _putRaw_BLOB(ctx, text, textLen);
 
@@ -760,14 +760,14 @@ BJSON_API bjson_status_t bjson_encodeString(bjson_encodeCtx_t *ctx,
       BJSON_DEBUG("encoder: encoded %s '%.*s', deep [%d], dataIdx [%d]",
                   _isKeyTurn(ctx) ? "key" : "string",
                   textLen, text,
-                  ctx -> deepIdx,
-                  ctx -> outDataIdx);
+                  ctx->deepIdx,
+                  ctx->outDataIdx);
     }
 
     _rotateMapTurn(ctx);
   }
 
-  return ctx -> statusCode;
+  return ctx->statusCode;
 }
 
 /*
@@ -816,16 +816,16 @@ BJSON_API bjson_status_t bjson_encodeBinary(bjson_encodeCtx_t *ctx,
      */
 
     BJSON_DEBUG3("encoder: going to put [%d] bytes of binary blob at offset [%d]",
-                 blobSize, ctx -> outDataIdx);
+                 blobSize, ctx->outDataIdx);
 
     _putRaw_BLOB(ctx, blob, blobSize);
     _rotateMapTurn(ctx);
 
     BJSON_DEBUG("encoder: encoded [%u] bytes of binary blob, deep [%d], dataIdx [%d]",
-                blobSize, ctx -> deepIdx, ctx -> outDataIdx);
+                blobSize, ctx->deepIdx, ctx->outDataIdx);
   }
 
-  return ctx -> statusCode;
+  return ctx->statusCode;
 }
 
 /*
@@ -857,7 +857,7 @@ BJSON_API bjson_status_t bjson_encodeArrayOpen(bjson_encodeCtx_t *ctx)
     _rotateMapTurn(ctx);
   }
 
-  return ctx -> statusCode;
+  return ctx->statusCode;
 }
 
 /*
@@ -876,7 +876,7 @@ BJSON_API bjson_status_t bjson_encodeArrayClose(bjson_encodeCtx_t *ctx)
     _leaveMapOrArray(ctx, 0);
   }
 
-  return ctx -> statusCode;
+  return ctx->statusCode;
 }
 
 /*
@@ -911,7 +911,7 @@ BJSON_API bjson_status_t bjson_encodeMapOpen(bjson_encodeCtx_t *ctx)
     _rotateMapTurn(ctx);
   }
 
-  return ctx -> statusCode;
+  return ctx->statusCode;
 }
 
 /*
@@ -930,7 +930,7 @@ BJSON_API bjson_status_t bjson_encodeMapClose(bjson_encodeCtx_t *ctx)
     _leaveMapOrArray(ctx, 1);
   }
 
-  return ctx -> statusCode;
+  return ctx->statusCode;
 }
 
 /*
@@ -957,7 +957,7 @@ BJSON_API char *bjson_encoderFormatErrorMessage(bjson_encodeCtx_t *ctx, int verb
   int   msgCapacity = BJSON_MAX_ERROR_MESSAGE_LENGTH;
   char *msgText     = bjson_malloc(ctx, msgCapacity + 1);
 
-  snprintf(msgText, msgCapacity, "%s", bjson_getStatusAsText(ctx -> statusCode));
+  snprintf(msgText, msgCapacity, "%s", bjson_getStatusAsText(ctx->statusCode));
 
   return msgText;
 }
@@ -985,5 +985,5 @@ BJSON_API void bjson_encoderFreeErrorMessage(bjson_encodeCtx_t *ctx, char *error
 
 BJSON_API bjson_status_t bjson_encoderGetStatus(bjson_encodeCtx_t *ctx)
 {
-  return ctx -> statusCode;
+  return ctx->statusCode;
 }
