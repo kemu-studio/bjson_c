@@ -525,6 +525,12 @@ static void _cacheFetch(bjson_decodeCtx_t *ctx,
 
     if (bytesToLoad > 0)
     {
+      /* Avoid false clang-tidy warning:
+       * error: Use of memory after it is freed [clang-analyzer-unix.Malloc,-warnings-as-errors]
+       * memcpy(ctx -> cache + ctx -> cacheIdx, *inData, bytesToLoad);
+       * ^
+       *
+       * NOLINTNEXTLINE */
       memcpy(ctx -> cache + ctx -> cacheIdx, *inData, bytesToLoad);
 
       ctx -> cacheIdx          += bytesToLoad;
