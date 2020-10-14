@@ -1,5 +1,5 @@
 # 2.0.0 (2020-10-14)
-- Decoder callbacks returns bjson_decodeCallbackResult_t codes:
+- Decoder callbacks return bjson_decodeCallbackResult_t codes:
   - bjson_decodeCallbackResult_Continue,
   - bjson_decodeCallbackResult_Abort,
   - bjson_decodeCallbackResult_StepOver (Reserved for future use),
