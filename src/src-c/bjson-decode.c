@@ -40,31 +40,39 @@
 /*
  * Helper macro to pass decoded token via caller callback.
  * We do below steps here:
- * - Check is given callback defined by caller,
- * - If yes, then call it (parameters depends on callback),
- * - If callback returns false (0), then stop decode process.
+ * 1. Check is given callback defined by caller,
+ * 2. If yes, then call it (parameters depends on callback),
+ * 3. Check the return code got from callback:
+ * - bjson_decoderCallbackResult_Continue: then we go to the next token and
+ *  continue decoding,
+ * - bjson_decoderCallbackResult_Abort: stop the decoder (don't go on to the
+ *  next token),
+ * - bjson_decoderCallbackResult_StepOver: Not implemented,
+ * - bjson_decoderCallbackResult_StepOutside: Not implemented.
  */
 
 #define PASS_TOKEN0(_ctx_, _cb_)                              \
   {                                                           \
-    if ((_ctx_)->callbacks->_cb_)                             \
+    if (_ctx_->callbacks->_cb_)                               \
     {                                                         \
-      if (!(_ctx_)->callbacks->_cb_((_ctx_)->callerCtx))      \
+      if (_ctx_->callbacks->_cb_(_ctx_->callerCtx)            \
+          != bjson_decoderCallbackResult_Continue)            \
       {                                                       \
         _setErrorState(_ctx_, bjson_status_canceledByClient); \
       }                                                       \
     }                                                         \
   }
 
-#define PASS_TOKEN(_ctx_, _cb_, ...)                                      \
-  {                                                                       \
-    if (_ctx_->callbacks->_cb_)                                           \
-    {                                                                     \
-      if (!_ctx_->callbacks->_cb_(_ctx_->callerCtx, __VA_ARGS__))         \
-      {                                                                   \
-        _setErrorState(_ctx_, bjson_status_canceledByClient);             \
-      }                                                                   \
-    }                                                                     \
+#define PASS_TOKEN(_ctx_, _cb_, ...)                            \
+  {                                                             \
+    if (_ctx_->callbacks->_cb_)                                 \
+    {                                                           \
+      if (_ctx_->callbacks->_cb_(_ctx_->callerCtx, __VA_ARGS__) \
+          != bjson_decoderCallbackResult_Continue)              \
+      {                                                         \
+        _setErrorState(_ctx_, bjson_status_canceledByClient);   \
+      }                                                         \
+    }                                                           \
   }
 
 /*
