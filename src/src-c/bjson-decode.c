@@ -31,8 +31,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define MIN(a,b) (((a)<(b))?(a):(b))
-#define MAX(a,b) (((a)>(b))?(a):(b))
+#define MIN(a, b) (((a) < (b)) ? (a) : (b))
+#define MAX(a, b) (((a) > (b)) ? (a) : (b))
 
 #define BJSON_DATATYPE_SIZE_MASK (0x3U)
 #define BJSON_DATATYPE_BASE_MASK (~0x3U)
@@ -51,28 +51,26 @@
  * - bjson_decoderCallbackResult_StepOutside: Not implemented.
  */
 
-#define PASS_TOKEN0(_ctx_, _cb_)                              \
-  {                                                           \
-    if (_ctx_->callbacks->_cb_)                               \
-    {                                                         \
-      if (_ctx_->callbacks->_cb_(_ctx_->callerCtx)            \
-          != bjson_decoderCallbackResult_Continue)            \
-      {                                                       \
-        _setErrorState(_ctx_, bjson_status_canceledByClient); \
-      }                                                       \
-    }                                                         \
+#define PASS_TOKEN0(_ctx_, _cb_)                                                            \
+  {                                                                                         \
+    if (_ctx_->callbacks->_cb_)                                                             \
+    {                                                                                       \
+      if (_ctx_->callbacks->_cb_(_ctx_->callerCtx) != bjson_decoderCallbackResult_Continue) \
+      {                                                                                     \
+        _setErrorState(_ctx_, bjson_status_canceledByClient);                               \
+      }                                                                                     \
+    }                                                                                       \
   }
 
-#define PASS_TOKEN(_ctx_, _cb_, ...)                            \
-  {                                                             \
-    if (_ctx_->callbacks->_cb_)                                 \
-    {                                                           \
-      if (_ctx_->callbacks->_cb_(_ctx_->callerCtx, __VA_ARGS__) \
-          != bjson_decoderCallbackResult_Continue)              \
-      {                                                         \
-        _setErrorState(_ctx_, bjson_status_canceledByClient);   \
-      }                                                         \
-    }                                                           \
+#define PASS_TOKEN(_ctx_, _cb_, ...)                                                                     \
+  {                                                                                                      \
+    if (_ctx_->callbacks->_cb_)                                                                          \
+    {                                                                                                    \
+      if (_ctx_->callbacks->_cb_(_ctx_->callerCtx, __VA_ARGS__) != bjson_decoderCallbackResult_Continue) \
+      {                                                                                                  \
+        _setErrorState(_ctx_, bjson_status_canceledByClient);                                            \
+      }                                                                                                  \
+    }                                                                                                    \
   }
 
 /*
@@ -93,8 +91,7 @@ typedef enum
   bjson_decodeStage_bodySizeOrImmValue,
   bjson_decodeStage_stringOrBinaryBody,
   bjson_decodeStage_error,
-}
-bjson_decodeStage_t;
+} bjson_decodeStage_t;
 
 typedef struct bjson_decodeCtx
 {
@@ -178,8 +175,7 @@ typedef struct bjson_decodeCtx
    */
 
   void *callerCtx;
-}
-bjson_decodeCtx_t;
+} bjson_decodeCtx_t;
 
 /*
  * ----------------------------------------------------------------------------
@@ -564,7 +560,6 @@ static void _cacheFetch(bjson_decodeCtx_t *ctx,
  * ----------------------------------------------------------------------------
  */
 
-
 /*
  * Pass next BJSON chunk to decoder.
  *
@@ -580,7 +575,7 @@ bjson_status_t bjson_decoderParse(bjson_decodeCtx_t *ctx,
                                   const void *inDataRaw,
                                   size_t inDataSize)
 {
-  uint8_t *inData = (uint8_t *) inDataRaw;
+  uint8_t *inData = (uint8_t *)inDataRaw;
 
   /*
    * Try finish fetching missing bytes to complete fragmented token first.
@@ -615,13 +610,13 @@ bjson_status_t bjson_decoderParse(bjson_decodeCtx_t *ctx,
    * We always process all input buffer no matter is it partially or not.
    */
 
-  while((inDataSize > 0) && (ctx->stage != bjson_decodeStage_error))
+  while ((inDataSize > 0) && (ctx->stage != bjson_decodeStage_error))
   {
     /*
      * Dispatch current stage if possible.
      */
 
-    switch(ctx->stage)
+    switch (ctx->stage)
     {
       case bjson_decodeStage_dataType:
       {
@@ -643,8 +638,8 @@ bjson_status_t bjson_decoderParse(bjson_decodeCtx_t *ctx,
          */
 
         if (_isKeyTurn(ctx) &&
-           ((ctx->dataType & BJSON_DATATYPE_BASE_MASK) != BJSON_DATATYPE_STRING_BASE) &&
-           (ctx->dataType != BJSON_DATATYPE_EMPTY_STRING))
+            ((ctx->dataType & BJSON_DATATYPE_BASE_MASK) != BJSON_DATATYPE_STRING_BASE) &&
+            (ctx->dataType != BJSON_DATATYPE_EMPTY_STRING))
         {
           _setErrorState(ctx, bjson_status_error_invalidObjectKey);
 
@@ -657,7 +652,7 @@ bjson_status_t bjson_decoderParse(bjson_decodeCtx_t *ctx,
          * byte and this is the last stage.
          */
 
-        switch(ctx->dataType)
+        switch (ctx->dataType)
         {
           /*
            * Basic primitives (single byte).
@@ -771,7 +766,7 @@ bjson_status_t bjson_decoderParse(bjson_decodeCtx_t *ctx,
             case BJSON_DATATYPE_POSITIVE_INTEGER_BASE:
             {
               BJSON_DEBUG("decoder: decoded positive integer%d [%lld]",
-                          ctx->dataTypeSize*8,
+                          ctx->dataTypeSize * 8,
                           ctx->bodySizeOrImmValue.valueInteger);
 
               _passInteger(ctx, ctx->bodySizeOrImmValue.valueInteger);
@@ -788,7 +783,7 @@ bjson_status_t bjson_decoderParse(bjson_decodeCtx_t *ctx,
             case BJSON_DATATYPE_NEGATIVE_INTEGER_BASE:
             {
               BJSON_DEBUG("decoder: decoded negative integer%d [%lld]",
-                           ctx->dataTypeSize*8,
+                          ctx->dataTypeSize * 8,
                           -ctx->bodySizeOrImmValue.valueInteger);
 
               _passInteger(ctx, -ctx->bodySizeOrImmValue.valueInteger);
@@ -804,7 +799,7 @@ bjson_status_t bjson_decoderParse(bjson_decodeCtx_t *ctx,
 
             case BJSON_DATATYPE_FLOAT_BASE:
             {
-              switch(ctx->dataType)
+              switch (ctx->dataType)
               {
                 case BJSON_DATATYPE_FLOAT32:
                 {

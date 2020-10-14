@@ -31,7 +31,7 @@ void bjson_debug_dumpBuffer(void *buf, size_t bufSize)
 {
   size_t i;
 
-  uint8_t *buf8 = (uint8_t *) buf;
+  uint8_t *buf8 = (uint8_t *)buf;
 
   for (i = 0; i < bufSize; i++)
   {
