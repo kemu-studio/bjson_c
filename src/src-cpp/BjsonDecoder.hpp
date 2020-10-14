@@ -166,17 +166,17 @@ private:
   //                               Public API
   // ---------------------------------------------------------------------------
 
-  bjson_status_t parse(const void *buf, size_t bufSize)
+  virtual bjson_status_t parse(const void *buf, size_t bufSize)
   {
     return bjson_decoderParse(_ctx, buf, bufSize);
   }
 
-  bjson_status_t complete()
+  virtual bjson_status_t complete()
   {
     return bjson_decoderComplete(_ctx);
   }
 
-  void reset()
+  virtual void reset()
   {
     // Possible improvement: Optimize it.
     _clear();
