@@ -113,7 +113,8 @@ BJSON_API void
  */
 
 BJSON_API bjson_status_t
-bjson_decoderParse(bjson_decodeCtx_t *ctx, void *inDataRaw, size_t inDataSize);
+bjson_decoderParse(bjson_decodeCtx_t *ctx,
+                   const void *inDataRaw, size_t inDataSize);
 
 BJSON_API bjson_status_t
   bjson_decoderComplete(bjson_decodeCtx_t *ctx);

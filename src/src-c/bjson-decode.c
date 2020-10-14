@@ -577,7 +577,7 @@ static void _cacheFetch(bjson_decodeCtx_t *ctx,
  */
 
 bjson_status_t bjson_decoderParse(bjson_decodeCtx_t *ctx,
-                                  void *inDataRaw,
+                                  const void *inDataRaw,
                                   size_t inDataSize)
 {
   uint8_t *inData = (uint8_t *) inDataRaw;
