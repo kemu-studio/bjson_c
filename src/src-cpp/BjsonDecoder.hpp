@@ -20,6 +20,9 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+#ifndef _BjsonDecoder_Hpp_
+#define _BjsonDecoder_Hpp_
+
 #include <bjson/bjson-common.h>
 #include <bjson/bjson-decode.h>
 
@@ -202,3 +205,5 @@ private:
   static inline const char * getVersionAsText() { return bjson_getVersionAsText(); }
   static inline unsigned int getVersion()       { return bjson_getVersion(); }
 };
+
+#endif /* _BjsonDecoder_Hpp_ */
