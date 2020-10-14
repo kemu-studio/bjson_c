@@ -28,19 +28,22 @@
 // -----------------------------------------------------------------------------
 
 #define BJSON_CPP_DECODE0(NAME)                              \
-  static int _handlerForPureC_##NAME(void *thiz)             \
+  static bjson_decoderCallbackResult_t                       \
+    _handlerForPureC_##NAME(void *thiz)                      \
   {                                                          \
     return (reinterpret_cast<BjsonDecoder*>(thiz))->NAME();  \
   }
 
 #define BJSON_CPP_DECODE1(NAME, TYPE1)                           \
-  static int _handlerForPureC_##NAME(void *thiz, TYPE1 value)    \
+  static bjson_decoderCallbackResult_t                           \
+    _handlerForPureC_##NAME(void *thiz, TYPE1 value)             \
   {                                                              \
     return (reinterpret_cast<BjsonDecoder*>(thiz))->NAME(value); \
   }
 
 #define BJSON_CPP_DECODE2(NAME, TYPE1, TYPE2)                      \
-  static int _handlerForPureC_##NAME(void *thiz, TYPE1 x, TYPE2 y) \
+  static bjson_decoderCallbackResult_t                             \
+    _handlerForPureC_##NAME(void *thiz, TYPE1 x, TYPE2 y)          \
   {                                                                \
     return (reinterpret_cast<BjsonDecoder*>(thiz))->NAME(x, y);    \
   }
@@ -56,17 +59,18 @@ protected:
   // in stream-like fasion.
   // ---------------------------------------------------------------------------
 
-  virtual int onNull() {return 0;}
-  virtual int onBoolean(int /*unused*/) {return 0;}
-  virtual int onInteger(int64_t /*unused*/) {return 0;}
-  virtual int onDouble(double /*unused*/) {return 0;}
-  virtual int onNumber(const unsigned char * /*unused*/, size_t /*unused*/) {return 0;}
-  virtual int onString(const unsigned char * /*unused*/, size_t /*unused*/) {return 0;}
-  virtual int onMapKey(const unsigned char * /*unused*/, size_t /*unused*/) {return 0;}
-  virtual int onStartMap() {return 0;}
-  virtual int onEndMap() {return 0;}
-  virtual int onStartArray() {return 0;}
-  virtual int onEndArray() {return 0;}
+  virtual bjson_decoderCallbackResult_t onDefault() {return bjson_decoderCallbackResult_Continue;}
+  virtual bjson_decoderCallbackResult_t onNull() {return onDefault();}
+  virtual bjson_decoderCallbackResult_t onBoolean(int /*unused*/) {return onDefault();}
+  virtual bjson_decoderCallbackResult_t onInteger(int64_t /*unused*/) {return onDefault();}
+  virtual bjson_decoderCallbackResult_t onDouble(double /*unused*/) {return onDefault();}
+  virtual bjson_decoderCallbackResult_t onNumber(const unsigned char * /*unused*/, size_t /*unused*/) {return onDefault();}
+  virtual bjson_decoderCallbackResult_t onString(const unsigned char * /*unused*/, size_t /*unused*/) {return onDefault();}
+  virtual bjson_decoderCallbackResult_t onMapKey(const unsigned char * /*unused*/, size_t /*unused*/) {return onDefault();}
+  virtual bjson_decoderCallbackResult_t onStartMap() {return onDefault();}
+  virtual bjson_decoderCallbackResult_t onEndMap() {return onDefault();}
+  virtual bjson_decoderCallbackResult_t onStartArray() {return onDefault();}
+  virtual bjson_decoderCallbackResult_t onEndArray() {return onDefault();}
 
   // ---------------------------------------------------------------------------
   //                        Internal wrappers (private)
