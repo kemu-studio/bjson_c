@@ -40,8 +40,8 @@
 /*
  * Helper macro to pass decoded token via caller callback.
  * We do below steps here:
- * 1. Check is given callback defined by caller,
- * 2. If yes, then call it (parameters depends on callback),
+ * 1. Check if given callback is defined by caller,
+ * 2. If yes, then call it (parameters depend on callback),
  * 3. Check the return code got from callback:
  * - bjson_decoderCallbackResult_Continue: then we go to the next token and
  *  continue decoding,
