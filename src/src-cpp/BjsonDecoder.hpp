@@ -163,7 +163,7 @@ private:
   //                               Public API
   // ---------------------------------------------------------------------------
 
-  bjson_status_t parse(void *buf, size_t bufSize)
+  bjson_status_t parse(const void *buf, size_t bufSize)
   {
     return bjson_decoderParse(_ctx, buf, bufSize);
   }
