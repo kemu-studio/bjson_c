@@ -30,6 +30,7 @@ static char g_versionText[BJSON_VERSION_TEXT_SIZE] = {0};
 
 BJSON_API const char *bjson_getStatusAsText(bjson_status_t statusCode)
 {
+  // clang-format off
   struct
   {
     bjson_status_t statusCode;
@@ -60,6 +61,7 @@ BJSON_API const char *bjson_getStatusAsText(bjson_status_t statusCode)
     /* Array terminator. */
     {0, NULL}
   };
+  // clang-format on
 
   const char *rv = "internal error";
 
@@ -80,6 +82,7 @@ BJSON_API const char *bjson_getStatusAsText(bjson_status_t statusCode)
 
 BJSON_API const char *bjson_getTokenName(uint8_t tokenId)
 {
+  // clang-format off
   struct
   {
     uint8_t id;
@@ -135,6 +138,7 @@ BJSON_API const char *bjson_getTokenName(uint8_t tokenId)
     /* Array terminator. */
     {0, NULL}
   };
+  // clang-format on
 
   const char *rv = "unknown";
 

@@ -68,68 +68,68 @@ class MyBjsonDecoder : public BjsonDecoder
   // We use these functions to tracks what is going on while deciding.
   // ---------------------------------------------------------------------------
 
-  int onNull()
+  bjson_decoderCallbackResult_t onNull()
   {
     _deep_printf("null");
-    return 1;
+    return bjson_decoderCallbackResult_Continue;
   }
 
-  int onBoolean(int value)
+  bjson_decoderCallbackResult_t onBoolean(int value)
   {
     _deep_printf("boolean (%s)", value ? "true" : "false");
-    return 1;
+    return bjson_decoderCallbackResult_Continue;
   }
 
-  int onInteger(long long value)
+  bjson_decoderCallbackResult_t onInteger(long long value)
   {
     _deep_printf("integer (%lld)", value);
-    return 1;
+    return bjson_decoderCallbackResult_Continue;
   }
 
-  int onDouble(double value)
+  bjson_decoderCallbackResult_t onDouble(double value)
   {
     _deep_printf("double (%lf)", value);
-    return 1;
+    return bjson_decoderCallbackResult_Continue;
   }
 
-  int onString(const unsigned char *text, size_t textLen)
+  bjson_decoderCallbackResult_t onString(const unsigned char *text, size_t textLen)
   {
     _deep_printf("string ('%.*s')", textLen, text);
-    return 1;
+    return bjson_decoderCallbackResult_Continue;
   }
 
-  int onMapKey(const unsigned char *text, size_t textLen)
+  bjson_decoderCallbackResult_t onMapKey(const unsigned char *text, size_t textLen)
   {
     _deep_printf("key ('%.*s')", textLen, text);
-    return 1;
+    return bjson_decoderCallbackResult_Continue;
   }
 
-  int onStartMap()
+  bjson_decoderCallbackResult_t onStartMap()
   {
     _deep_printf("{");
     _deepIdx++;
-    return 1;
+    return bjson_decoderCallbackResult_Continue;
   }
 
-  int onEndMap()
+  bjson_decoderCallbackResult_t onEndMap()
   {
     _deepIdx--;
     _deep_printf("}");
-    return 1;
+    return bjson_decoderCallbackResult_Continue;
   }
 
-  int onStartArray()
+  bjson_decoderCallbackResult_t onStartArray()
   {
     _deep_printf("[");
     _deepIdx++;
-    return 1;
+    return bjson_decoderCallbackResult_Continue;
   }
 
-  int onEndArray()
+  bjson_decoderCallbackResult_t onEndArray()
   {
     _deepIdx--;
     _deep_printf("]");
-    return 1;
+    return bjson_decoderCallbackResult_Continue;
   }
 
 public:

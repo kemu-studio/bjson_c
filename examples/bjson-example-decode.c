@@ -77,78 +77,78 @@ static void deep_printf(const char *fmt, ...)
  * We use these functions to tracks what is going on while deciding.
  * ---------------------------------------------------------------------------*/
 
-static int test_bjson_null(void *ctx)
+static bjson_decoderCallbackResult_t test_bjson_null(void *ctx)
 {
   deep_printf("null");
 
-  return 1;
+  return bjson_decoderCallbackResult_Continue;
 }
 
-static int test_bjson_boolean(void *ctx, int value)
+static bjson_decoderCallbackResult_t test_bjson_boolean(void *ctx, int value)
 {
   deep_printf("boolean (%s)", value ? "true" : "false");
 
-  return 1;
+  return bjson_decoderCallbackResult_Continue;
 }
 
-static int test_bjson_integer(void *ctx, int64_t value)
+static bjson_decoderCallbackResult_t test_bjson_integer(void *ctx, int64_t value)
 {
   deep_printf("integer (%" PRId64 ")", value);
 
-  return 1;
+  return bjson_decoderCallbackResult_Continue;
 }
 
-static int test_bjson_double(void *ctx, double value)
+static bjson_decoderCallbackResult_t test_bjson_double(void *ctx, double value)
 {
   deep_printf("double (%lf)", value);
 
-  return 1;
+  return bjson_decoderCallbackResult_Continue;
 }
 
-static int test_bjson_string(void *ctx,
+static bjson_decoderCallbackResult_t test_bjson_string(void *ctx,
                              const unsigned char *text,
                              size_t textLen)
 {
   deep_printf("string ('%.*s')", textLen, text);
 
-  return 1;
+  return bjson_decoderCallbackResult_Continue;
 }
 
-static int test_bjson_map_key(void *ctx,
+static bjson_decoderCallbackResult_t test_bjson_map_key(void *ctx,
                              const unsigned char *text,
                              size_t textLen)
 {
   deep_printf("key ('%.*s')", textLen, text);
 
-  return 1;
+  return bjson_decoderCallbackResult_Continue;
 }
 
-static int test_bjson_start_map(void *ctx)
+static bjson_decoderCallbackResult_t test_bjson_start_map(void *ctx)
 {
   deep_printf("{");
   g_deepIdx++;
-  return 1;
+  return bjson_decoderCallbackResult_Continue;
 }
 
-static int test_bjson_end_map(void *ctx)
+static bjson_decoderCallbackResult_t test_bjson_end_map(void *ctx)
 {
   g_deepIdx--;
   deep_printf("}");
-  return 1;
+  return bjson_decoderCallbackResult_Continue;
 }
 
-static int test_bjson_start_array(void *ctx)
+static bjson_decoderCallbackResult_t test_bjson_start_array(void *ctx)
 {
   deep_printf("[");
   g_deepIdx++;
-  return 1;
+  return bjson_decoderCallbackResult_Continue;
 }
 
-static int test_bjson_end_array(void *ctx)
+static bjson_decoderCallbackResult_t test_bjson_end_array(void *ctx)
 {
   g_deepIdx--;
   deep_printf("]");
-  return 1;
+  return bjson_decoderCallbackResult_Continue;
 }
 
 /* ----------------------------------------------------------------------------

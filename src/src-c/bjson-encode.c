@@ -30,8 +30,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define MIN(a,b) (((a)<(b))?(a):(b))
-#define MAX(a,b) (((a)>(b))?(a):(b))
+#define MIN(a, b) (((a) < (b)) ? (a) : (b))
+#define MAX(a, b) (((a) > (b)) ? (a) : (b))
 
 #define MAX_VALUE_UINT8  0xff
 #define MAX_VALUE_UINT16 0xffff
@@ -71,8 +71,7 @@ typedef struct bjson_encodeCtx
   size_t blockIdx[BJSON_MAX_DEPTH + 1];
   uint8_t blockIsMap[BJSON_MAX_DEPTH + 1];
   uint8_t blockMapTurn[BJSON_MAX_DEPTH + 1];
-}
-bjson_encodeCtx_t;
+} bjson_encodeCtx_t;
 
 /*
  * ----------------------------------------------------------------------------
@@ -434,7 +433,6 @@ static void _leaveMapOrArray(bjson_encodeCtx_t *ctx, int isMap)
  * ----------------------------------------------------------------------------
  */
 
-
 /*
  * Create new encoder context. All other bjson_encodeXxx() functions
  * need this context to work.
@@ -532,7 +530,7 @@ BJSON_API bjson_status_t bjson_encoderReset(bjson_encodeCtx_t *ctx,
                                             const char *sepText)
 {
   /* Unused parameter */
-  (void) sepText;
+  (void)sepText;
 
   _setErrorState(ctx, bjson_status_error_notImplemented);
 
@@ -696,8 +694,8 @@ BJSON_API bjson_status_t bjson_encodeNumberFromText(bjson_encodeCtx_t *ctx,
                                                     size_t textLen)
 {
   /* Mark unused params */
-  (void) text;
-  (void) textLen;
+  (void)text;
+  (void)textLen;
 
   _setErrorState(ctx, bjson_status_error_notImplemented);
 
@@ -952,7 +950,7 @@ BJSON_API char *bjson_encoderFormatErrorMessage(bjson_encodeCtx_t *ctx, int verb
    * Possible improvement: add more context related info (verbose mode).
    * Mark unused parameter.
    */
-  (void) verbose;
+  (void)verbose;
 
   int   msgCapacity = BJSON_MAX_ERROR_MESSAGE_LENGTH;
   char *msgText     = bjson_malloc(ctx, msgCapacity + 1);
