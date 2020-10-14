@@ -119,10 +119,15 @@ private:
   //                      Wrap init code into constructor
   // ---------------------------------------------------------------------------
 
-  BjsonDecoder()
+  virtual void _init()
   {
     _errorMsg = nullptr;
     _ctx      = bjson_decoderCreate(&_callbacks, nullptr, this);
+  }
+
+  BjsonDecoder()
+  {
+    _init();
   }
 
   BjsonDecoder(BjsonDecoder const&)             = default;
@@ -134,7 +139,7 @@ private:
   //                      Wrap clean code into destructor
   // ---------------------------------------------------------------------------
 
-  virtual ~BjsonDecoder()
+  virtual void _clear()
   {
     if (_errorMsg != nullptr)
     {
@@ -149,6 +154,11 @@ private:
     }
   }
 
+  virtual ~BjsonDecoder()
+  {
+    _clear();
+  }
+
   // ---------------------------------------------------------------------------
   //                               Public API
   // ---------------------------------------------------------------------------
@@ -161,6 +171,13 @@ private:
   bjson_status_t complete()
   {
     return bjson_decoderComplete(_ctx);
+  }
+
+  void reset()
+  {
+    // Possible improvement: Optimize it.
+    _clear();
+    _init();
   }
 
   // ---------------------------------------------------------------------------
