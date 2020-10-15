@@ -123,7 +123,7 @@ static void *bjsonTestRealloc(void *ctx, void *ptr, size_t sz)
  * We use these functions to tracks what is going on while deciding.
  * ---------------------------------------------------------------------------*/
 
-static int test_bjson_null(void *ctx)
+static bjson_decoderCallbackResult_t test_bjson_null(void *ctx)
 {
   if (g_bjson_testMode == TEST_MODE_ENCODE)
   {
@@ -134,10 +134,10 @@ static int test_bjson_null(void *ctx)
     printf("null\n");
   }
 
-  return 1;
+  return bjson_decoderCallbackResult_Continue;
 }
 
-static int test_bjson_boolean(void *ctx, int value)
+static bjson_decoderCallbackResult_t test_bjson_boolean(void *ctx, int value)
 {
   if (g_bjson_testMode == TEST_MODE_ENCODE)
   {
@@ -148,10 +148,10 @@ static int test_bjson_boolean(void *ctx, int value)
     printf("bool: %s\n", value ? "true" : "false");
   }
 
-  return 1;
+  return bjson_decoderCallbackResult_Continue;
 }
 
-static int test_bjson_integer(void *ctx, int64_t value)
+static bjson_decoderCallbackResult_t test_bjson_integer(void *ctx, int64_t value)
 {
   if (g_bjson_testMode == TEST_MODE_ENCODE)
   {
@@ -162,10 +162,10 @@ static int test_bjson_integer(void *ctx, int64_t value)
     printf("integer: %" PRId64 "\n", value);
   }
 
-  return 1;
+  return bjson_decoderCallbackResult_Continue;
 }
 
-static int test_bjson_double(void *ctx, double value)
+static bjson_decoderCallbackResult_t test_bjson_double(void *ctx, double value)
 {
   if (g_bjson_testMode == TEST_MODE_ENCODE)
   {
@@ -205,12 +205,13 @@ static int test_bjson_double(void *ctx, double value)
     printf("double: %s\n", valueText);
   }
 
-  return 1;
+  return bjson_decoderCallbackResult_Continue;
 }
 
-static int test_bjson_string(void *ctx,
-                             const unsigned char *text,
-                             size_t textLen)
+static bjson_decoderCallbackResult_t
+  test_bjson_string(void *ctx,
+                    const unsigned char *text,
+                    size_t textLen)
 {
   if (g_bjson_testMode == TEST_MODE_ENCODE)
   {
@@ -223,12 +224,13 @@ static int test_bjson_string(void *ctx,
     printf("'\n");
   }
 
-  return 1;
+  return bjson_decoderCallbackResult_Continue;
 }
 
-static int test_bjson_map_key(void *ctx,
-                             const unsigned char *text,
-                             size_t textLen)
+static bjson_decoderCallbackResult_t
+  test_bjson_map_key(void *ctx,
+                     const unsigned char *text,
+                     size_t textLen)
 {
   if (g_bjson_testMode == TEST_MODE_ENCODE)
   {
@@ -241,10 +243,10 @@ static int test_bjson_map_key(void *ctx,
     printf("'\n");
   }
 
-  return 1;
+  return bjson_decoderCallbackResult_Continue;
 }
 
-static int test_bjson_start_map(void *ctx)
+static bjson_decoderCallbackResult_t test_bjson_start_map(void *ctx)
 {
   if (g_bjson_testMode == TEST_MODE_ENCODE)
   {
@@ -255,10 +257,10 @@ static int test_bjson_start_map(void *ctx)
     printf("map open '{'\n");
   }
 
-  return 1;
+  return bjson_decoderCallbackResult_Continue;
 }
 
-static int test_bjson_end_map(void *ctx)
+static bjson_decoderCallbackResult_t test_bjson_end_map(void *ctx)
 {
   if (g_bjson_testMode == TEST_MODE_ENCODE)
   {
@@ -269,10 +271,10 @@ static int test_bjson_end_map(void *ctx)
     printf("map close '}'\n");
   }
 
-  return 1;
+  return bjson_decoderCallbackResult_Continue;
 }
 
-static int test_bjson_start_array(void *ctx)
+static bjson_decoderCallbackResult_t test_bjson_start_array(void *ctx)
 {
   if (g_bjson_testMode == TEST_MODE_ENCODE)
   {
@@ -283,10 +285,10 @@ static int test_bjson_start_array(void *ctx)
     printf("array open '['\n");
   }
 
-  return 1;
+  return bjson_decoderCallbackResult_Continue;
 }
 
-static int test_bjson_end_array(void *ctx)
+static bjson_decoderCallbackResult_t test_bjson_end_array(void *ctx)
 {
   if (g_bjson_testMode == TEST_MODE_ENCODE)
   {
@@ -297,7 +299,7 @@ static int test_bjson_end_array(void *ctx)
     printf("array close ']'\n");
   }
 
-  return 1;
+  return bjson_decoderCallbackResult_Continue;
 }
 
 /* ----------------------------------------------------------------------------
