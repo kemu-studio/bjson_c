@@ -20,6 +20,9 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+#ifndef _BjsonEncoder_Hpp_
+#define _BjsonEncoder_Hpp_
+
 #include <bjson/bjson-common.h>
 #include <bjson/bjson-encode.h>
 
@@ -27,22 +30,58 @@
 //        Helper macros to wrap pure C calbacks into C++ member calls
 // -----------------------------------------------------------------------------
 
-#define BJSON_CPP_ENCODE0(NAME) \
-  bjson_status_t NAME()         \
-  {                             \
-    return bjson_##NAME(_ctx);  \
+// Wrap C call bjson_encodeXxx(thiz) into:
+// - C++ method: thiz->encodeXxx(),
+// - C++ method: this->encodeKeyAndValueXxx()
+
+#define BJSON_CPP_ENCODE0(NAME)                   \
+  bjson_status_t encode##NAME()                   \
+  {                                               \
+    return bjson_encode##NAME(_ctx);              \
+  }                                               \
+                                                  \
+  inline bjson_status_t encodeKeyAndValue##NAME(  \
+                                 const char *key) \
+  {                                               \
+    encodeCString(key);                           \
+    return encode##NAME();                        \
   }
 
-#define BJSON_CPP_ENCODE1(NAME, TYPE1) \
-  bjson_status_t NAME(TYPE1 x)         \
-  {                                    \
-    return bjson_##NAME(_ctx, x);      \
+// Wrap C call bjson_encodeXxx(thiz, x) into C++ methods:
+// - thiz->encodeXxx(x),
+// - this->encodeKeyAndValueXxx(key, x).
+
+#define BJSON_CPP_ENCODE1(NAME, TYPE1)            \
+  bjson_status_t encode##NAME(TYPE1 x)            \
+  {                                               \
+    return bjson_encode##NAME(_ctx, x);           \
+  }                                               \
+                                                  \
+  inline bjson_status_t encodeKeyAndValue##NAME(  \
+                                const char *key,  \
+                                        TYPE1 x)  \
+  {                                               \
+    encodeCString(key);                           \
+    return encode##NAME(x);                       \
   }
 
-#define BJSON_CPP_ENCODE2(NAME, TYPE1, TYPE2) \
-  bjson_status_t NAME(TYPE1 x, TYPE2 y)       \
-  {                                           \
-    return bjson_##NAME(_ctx, x, y);          \
+// Wrap C call bjson_encodeXxx(thiz, x, y) into:
+// - C++ method: thiz->encodeXxx(x, y),
+// - C++ method: this->encodeKeyAndValueXxx(key, x, y).
+
+#define BJSON_CPP_ENCODE2(NAME, TYPE1, TYPE2)     \
+  bjson_status_t encode##NAME(TYPE1 x, TYPE2 y)   \
+  {                                               \
+    return bjson_encode##NAME(_ctx, x, y);        \
+  }                                               \
+                                                  \
+  inline bjson_status_t encodeKeyAndValue##NAME(  \
+                               const char *key,   \
+                                       TYPE1 x,   \
+                                       TYPE2 y)   \
+  {                                               \
+    encodeCString(key);                           \
+    return encode##NAME(x, y);                    \
   }
 
 class BjsonEncoder
@@ -99,28 +138,28 @@ public:
   //               Wrappers for zero-args encode functions
   // ---------------------------------------------------------------------------
 
-  BJSON_CPP_ENCODE0(encodeNull)
-  BJSON_CPP_ENCODE0(encodeMapOpen)
-  BJSON_CPP_ENCODE0(encodeMapClose)
-  BJSON_CPP_ENCODE0(encodeArrayOpen)
-  BJSON_CPP_ENCODE0(encodeArrayClose)
+  BJSON_CPP_ENCODE0(Null)
+  BJSON_CPP_ENCODE0(MapOpen)
+  BJSON_CPP_ENCODE0(MapClose)
+  BJSON_CPP_ENCODE0(ArrayOpen)
+  BJSON_CPP_ENCODE0(ArrayClose)
 
   // ---------------------------------------------------------------------------
   //                Wrappers for one-arg encode functions
   // ---------------------------------------------------------------------------
 
-  BJSON_CPP_ENCODE1(encodeInteger, int64_t)
-  BJSON_CPP_ENCODE1(encodeDouble, double)
-  BJSON_CPP_ENCODE1(encodeBool, int)
-  BJSON_CPP_ENCODE1(encodeCString, const char *)
+  BJSON_CPP_ENCODE1(Integer, int64_t)
+  BJSON_CPP_ENCODE1(Double, double)
+  BJSON_CPP_ENCODE1(Bool, int)
+  BJSON_CPP_ENCODE1(CString, const char *)
 
   // ---------------------------------------------------------------------------
   //                Wrappers for two-args encode functions
   // ---------------------------------------------------------------------------
 
-  BJSON_CPP_ENCODE2(encodeNumberFromText, const char *, size_t)
-  BJSON_CPP_ENCODE2(encodeString, const char *, size_t)
-  BJSON_CPP_ENCODE2(encodeBinary, void *, size_t)
+  BJSON_CPP_ENCODE2(NumberFromText, const char *, size_t)
+  BJSON_CPP_ENCODE2(String, const char *, size_t)
+  BJSON_CPP_ENCODE2(Binary, void *, size_t)
 
   // ---------------------------------------------------------------------------
   //              Wrappers for status management functions
@@ -149,3 +188,5 @@ public:
   static inline const char * getVersionAsText() { return bjson_getVersionAsText(); }
   static inline unsigned int getVersion()       { return bjson_getVersion(); }
 };
+
+#endif /* _BjsonEncoder_Hpp_ */
